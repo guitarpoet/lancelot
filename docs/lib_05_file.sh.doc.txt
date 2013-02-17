@@ -1,0 +1,210 @@
+File: lib_file.sh
+==================================================
+Description: Directory and File shell functions.
+Dependency: lib_user.sh, lib_dt.sh
+Author: Allen Zhao
+Email: allen.zhao@gmail.com
+==================================================
+
+
+Function: CheckFile_sp
+--------------------------------------------------
+Description: Check if a file meets certain criteria
+Usage: CheckFile_sp local-file-name [-a] [-f] [-x] [-w] [-s] [-r]
+Parameter: local-file-name
+Parameter: -f - check if a file is a regular file and exist. Default option
+Parameter: -x - check if a file is executable
+Parameter: -r - check if a file is readable
+Parameter: -w - check if a file is writable
+Parameter: -s - check if a file has non-zero size
+Parameter: -a - Check all ablve options
+Return: exit code, variable
+Example:
+  CheckFile_sp $My_File -a
+--------------------------------------------------
+
+
+Function: IsRemoteFile_sp
+--------------------------------------------------
+Description: Check a file is remote file
+Usage: IsRemoteFile_sp file-name
+Parameter: file-name
+Return: exit code
+Example:
+  IsRemoteFile_sp $My_File
+--------------------------------------------------
+
+
+Function: CheckDir_sp
+--------------------------------------------------
+Description: Check if a directory meets certain criteria
+Usage: CheckDir_sp local-dir-name {-a} [-d] [-r] [-w] [-x]
+Parameter: local-dir-name
+Parameter: -d - check if a file is a regular directory and exist. Default option
+Parameter: -x - check if a file is searchable
+Parameter: -r - check if a file is readable
+Parameter: -w - check if a file is writable
+Parameter: -a - Check all ablve options
+Return: exit code, variable
+Example:
+  CheckDir_sp $My_Dir -a
+--------------------------------------------------
+
+
+Function: IsAbsPath_sp
+--------------------------------------------------
+Description: Check if a path is absolute path
+Usage: IsAbsPath_sp path
+Parameter: Path
+Return: return code
+Example:
+  IsAbsPath_sp ./my/path
+--------------------------------------------------
+
+
+Function: MakeAbsPath_sp
+--------------------------------------------------
+Description: Make a path to abs path
+Usage: MakeAbsPath_sp path
+Parameter: Path
+Return: stdout, variable
+Example:
+  MakeAbsPath_sp ./my/path
+--------------------------------------------------
+
+
+Function: MakeTemp_sp
+--------------------------------------------------
+Description: Create temp file or directory
+Usage: MakeTemp_sp [-p parent-dir] [-h head] [-d|-f] [-n]
+Parameter: -p - parent-dir - Specify the parent directory. Default is $TMP_SP.
+Parameter: -d - File type is directory.
+Parameter: -f - File type is regular file. This is default option.
+Parameter: -n - Don't create the file or directory. By default, it will be created.
+Parameter: -h - Change the file prefix. Default is tmp
+Return: stdout, exit code, variable
+Example:
+  My_TmpFile=`MakeTemp_sp`
+  My_TmpDir=`MakeTemp_sp d c`
+--------------------------------------------------
+
+
+Function: RemoveTemp_sp
+--------------------------------------------------
+Description: Remove temp file or directory
+Usage: RemoveTemp_sp file-or-dir ...
+Parameter: file-or-dir ...
+Return: none
+Example:
+  RemoveTemp_sp "$My_tmp1" "$My_tmpDir2"
+--------------------------------------------------
+
+
+Function: GetFileSize_sp
+--------------------------------------------------
+Description: Get file size
+Usage: GetFileSize_sp file
+Parameter: file - The file
+Return: exit code, stdout, variable (error msg)
+Example:
+   My_newyear=`GetWeekday_sp 2011 -2` # My_newyear='2009'
+--------------------------------------------------
+
+
+Function: DFK_sp
+--------------------------------------------------
+Description: Same as "df -k", but will merge all fields in one line, if they are not
+Usage: DFK_sp [path]
+Parameter: path
+Return: exit code, stdout, variable (error msg)
+Example:
+   DFK_sp
+--------------------------------------------------
+
+
+Function: GetDiskSpace_sp
+--------------------------------------------------
+Description: Get disk space free/used in kB/percentage
+Usage: GetDiskSpace_sp path [-u|-f] [-p|-k]
+Parameter: path
+Parameter: -u - Get used
+Parameter: -f - Get free (default)
+Parameter: -p - In percentage
+Parameter: -k - In kB (default)
+Return: exit code, stdout, variable (error msg)
+Example:
+   My_used=`GetDiskSpace_sp /path -u -p`
+--------------------------------------------------
+
+
+Function: GetFileStats_sp
+--------------------------------------------------
+Description: Get file stats
+Usage: GetFileStats_sp file
+Parameter: file
+Return: exit code, stdout, variable (error msg)
+Example:
+   GetFileStats_sp file
+--------------------------------------------------
+
+
+Function: GetFileDirAttributes_sp
+--------------------------------------------------
+Description: Get file attributes
+Usage: GetFileDirAttributes_sp file attrName
+Parameter: file
+Parameter: attrName - The attributed name.
+    Please check GetFileStats_sp for supported attrName
+    device, inode, mode, nlinks, uid, gid, rdev, size, atime
+    mtime, ctime, atimedt, mtimedt, ctimedt, blksize, blocks
+Return: exit code, stdout, variable (error msg)
+Example:
+   My_file_uid=`GetFileDirAttributes_sp /path/to/myfile uid`
+--------------------------------------------------
+
+
+Function: GetFileDirOwnership_sp
+--------------------------------------------------
+Description: Get file ownership in name
+Usage: GetFileDirOwnership_sp file -a|-g|-u
+Parameter: file
+Parameter: -a - return user:group. This is default
+Parameter: -u - return user name
+Parameter: -g - return group name
+Return: exit code, stdout, variable (error msg)
+Example:
+   My_ownership=`GetFileDirOwnership_sp /path/to/myfile`
+--------------------------------------------------
+
+
+Function: IsFileDirChanged_sp
+--------------------------------------------------
+Description: Check if file is change in a time frame before now
+Usage: IsFileDirChanged_sp file -t "YYYY-MM-dd HH:mm:ss" | -s second | -e epoch_tm
+Parameter: file
+Parameter: -t "YYYY-MM-dd HH:mm:ss" - After time
+Parameter: -e epoch_tm - After time
+Parameter: -s seconds - Seconds before now
+Return: exit code, stdout, variable (error msg)
+Example:
+   if IsFileDirChanged_sp /path/my_file 3600 ; then
+       DoSomething
+    fi
+--------------------------------------------------
+
+
+Function: CreateBackup_sp
+--------------------------------------------------
+Description: Create a back of local file
+Usage: CreateBackup_sp /path/to/file [-r] [-d /backup/path] [-t]|[-e ext]
+Parameter: /path/to/file
+Parameter: -r - Remove the orignal file
+Parameter: -d /backup/path- Backup to other dir
+Parameter: -t - Add time stamp to file extention. This is default option
+Parameter: -e ext - Use specified extention
+Return: exit code, variable (error msg)
+Example:
+    CreateBackup_sp /path/myfile
+--------------------------------------------------
+
+

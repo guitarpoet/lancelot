@@ -1,0 +1,371 @@
+File: lib_dt.sh
+==================================================
+Description: Date and Time shell functions.
+Dependency: lib_misc.sh, lib_user.sh
+Author: Allen Zhao
+Email: allen.zhao@gmail.com
+==================================================
+
+
+Function: GetTimeStamp_sp
+--------------------------------------------------
+Description: Get a current time stamp in fomat YYYY-MM-dd HH:mm:ss
+Usage: GetTimeStamp_sp
+Return: stdout
+Example:
+  My_Curr_Time=`GetTimeStamp_sp`
+--------------------------------------------------
+
+
+Function: GetTimeStamp2_sp
+--------------------------------------------------
+Description: Get a current time stamp in fomat YYYYMMddHHmmss
+Usage: GetTimeStamp2_sp
+Return: stdout
+Example:
+  My_Curr_Time=`GetTimeStamp2_sp`
+--------------------------------------------------
+
+
+Function: Month2Name_sp
+--------------------------------------------------
+Description: Convert month number to name
+Usage: Month2Name_sp month-num [-f]
+Parameter: month-num. 0-12
+Parameter: -f - Print full name
+Return: exit code, stdout
+Example:
+  My_mn=`Month2Name_sp 12` # Dec
+--------------------------------------------------
+
+
+Function: Name2Month_sp
+--------------------------------------------------
+Description: Convert month name to number
+Usage: Name2Month_sp month-name
+Parameter: month-name
+Return: exit code, stdout, variable (error msg)
+Example:
+  My_mn=`Name2Month_sp Jan` # My_mn=01
+--------------------------------------------------
+
+
+Function: IsLeapYear_sp
+--------------------------------------------------
+Description: Check if the year is a leap year
+Usage: IsLeapYear_sp YYYY
+Parameter: YYYY - The year
+Return: exit code, variable (error msg)
+Example:
+   if IsLeapYear_sp 2001 ; then
+       DoSomething
+   fi
+--------------------------------------------------
+
+
+Function: GetPreYear_sp
+--------------------------------------------------
+Description: Get the last year
+Usage: GetPreYear_sp YYYY
+Parameter: YYYY - The year
+Return: exit code, stdout, variable (error msg)
+Example:
+   My_year=`GetPreYear_sp 2011` # My_year=2010
+--------------------------------------------------
+
+
+Function: GetNextYear_sp
+--------------------------------------------------
+Description: Get the next year
+Usage: GetNextYear_sp YYYY
+Parameter: YYYY - The year
+Return: exit code, stdout, variable (error msg)
+Example:
+   My_year=`GetNextYear_sp 2011` # My_year=2012
+--------------------------------------------------
+
+
+Function: GetDaysInMonth_sp
+--------------------------------------------------
+Description: Get the number days in a month
+Usage: GetDaysInMonth_sp YYYY-MM
+Parameter: YYYY-MM - The year-month
+Return: exit code, stdout, variable (error msg)
+Example:
+   My_year=`GetNextYear_sp 2011` # My_year=2012
+--------------------------------------------------
+
+
+Function: IsValidDate_sp
+--------------------------------------------------
+Description: Get the last month
+Usage: IsValidDate_sp YYYY-MM-DD
+Parameter: YYYY-MM-DD - The date
+Return: exit code, variable (error msg)
+Example:
+   if IsValidDate_sp '2010-11-12' ;
+       DoSomething
+   fi
+--------------------------------------------------
+
+
+Function: GetNextMonth_sp
+--------------------------------------------------
+Description: Get the next month
+Usage: GetNextMonth_sp YYYY-MM
+Parameter: YYYY-MM - The year and month
+Return: exit code, stdout, variable (error msg)
+Example:
+   My_year_mon=`GetNextMonth_sp 2011-12` # My_yearmon='2012-01'
+--------------------------------------------------
+
+
+Function: GetPreMonth_sp
+--------------------------------------------------
+Description: Get the last month
+Usage: GetPreMonth_sp YYYY-MM
+Parameter: YYYY-MM - The year and month
+Return: exit code, stdout, variable (error msg)
+Example:
+   My_year_mon=`GetPreMonth_sp 2011-01` # My_yearmon='2010-12'
+--------------------------------------------------
+
+
+Function: GetPreDay_sp
+--------------------------------------------------
+Description: Get yesterday's date
+Usage: GetPreDay_sp YYYY-MM-DD
+Parameter: YYYY-MM-DD - The date
+Return: exit code, stdout, variable (error msg)
+Example:
+   My_year_mon=`GetPreDay_sp 2011-01-01` # My_yearmon='2010-12-31'
+--------------------------------------------------
+
+
+Function: GetNextDay_sp
+--------------------------------------------------
+Description: Get tomorrow's date
+Usage: GetNextDay_sp YYYY-MM-DD
+Parameter: YYYY-MM-DD - The date
+Return: exit code, stdout, variable (error msg)
+Example:
+   My_year_mon=`GetNextDay_sp 2011-12-31` # My_yearmon='2012-01-01'
+--------------------------------------------------
+
+
+Function: GetWeekday_sp
+--------------------------------------------------
+Description: Get tomorrow's date
+Usage: GetWeekday_sp YYYY-MM-DD [-f]
+Parameter: YYYY-MM-DD - The date
+Parameter: -f - Return full name
+Return: exit code, stdout, variable (error msg)
+Example:
+   My_year_mon=`GetWeekday_sp 2011-12-31` # My_yearmon='2012-01-01'
+--------------------------------------------------
+
+
+Function: GetToday_sp
+--------------------------------------------------
+Description: Get Today's date
+Usage: GetToday_sp
+Return: stdout
+Example:
+   My_day=`GetToday_sp` # return YYYY-MM-dd
+--------------------------------------------------
+
+
+Function: GetYesterady_sp
+--------------------------------------------------
+Description: Get yesterady's date
+Usage: GetYesterady_sp
+Return: stdout
+Example:
+   My_day=`GetYesterady_sp` # return YYYY-MM-dd
+--------------------------------------------------
+
+
+Function: GetTomorrow_sp
+--------------------------------------------------
+Description: Get Tomorrow's date
+Usage: GetTomorrow_sp
+Return: stdout
+Example:
+   My_day=`GetTomorrow_sp` # return YYYY-MM-dd
+--------------------------------------------------
+
+
+Function: GetThisMonth_sp
+--------------------------------------------------
+Description: Get This month in format YYYY-MM
+Usage: GetThisMonth_sp
+Return: stdout
+Example:
+   My_mon=`GetThisMonth_sp` # return YYYY-MM
+--------------------------------------------------
+
+
+Function: GetThisYear_sp
+--------------------------------------------------
+Description: Get This year in format YYYY
+Usage: GetThisYear_sp
+Return: stdout
+Example:
+   My_mon=`GetThisYear_sp` # return YYYY
+--------------------------------------------------
+
+
+Function: GetLastMonth_sp
+--------------------------------------------------
+Description: Get last month in format YYYY-MM
+Usage: GetLastMonth_sp
+Return: stdout
+Example:
+   My_mon=`GetLastMonth_sp` # return YYYY-MM
+--------------------------------------------------
+
+
+Function: GetLastYear_sp
+--------------------------------------------------
+Description: Get last year in format YYYY
+Usage: GetLastYear_sp
+Return: stdout
+Example:
+   My_mon=`GetLastYear_sp` # return YYYY
+--------------------------------------------------
+
+
+Function: GetNow_sp
+--------------------------------------------------
+Description: Get a current time in fomat YYYY-MM-dd HH:mm:ss
+Usage: GetNow_sp
+Return: stdout
+Example:
+  My_now=`GetNow_sp`
+--------------------------------------------------
+
+
+Function: IsValidTime_sp
+--------------------------------------------------
+Description: Check if time is valid
+Usage: IsValidTime_sp "HH:MM:SS"
+Parameter: "HH:MM:SS" - the time
+Return: stdout
+Example:
+   if IsValidTime_sp "11:11:11" ;
+        DoSomething
+   fi
+--------------------------------------------------
+
+
+Function: IsValidDateTime_sp
+--------------------------------------------------
+Description: Check if date time is valid
+Usage: IsValidDateTime_sp "YYYY-mm-DD HH:MM:SS"
+Parameter: "YYYY-mm-DD HH:MM:SS"
+Return: stdout
+Example:
+   if IsValidDateTime_sp "2011-11-11 11:11:11" ;
+        DoSomething
+   fi
+--------------------------------------------------
+
+
+Function: DateTime2Epoch_sp
+--------------------------------------------------
+Description: Convert DateTime to Epoch
+Usage: DateTime2Epoch_sp "YYYY-MM-DD HH:MM:SS"
+Parameter: "YYYY-MM-DD HH:MM:SS" - The date and time
+Return: exit code, stdout, variable (error msg)
+Example:
+   My_epoch=`DateTime2Epoch_sp "2011-03-15 20:50:59"`
+--------------------------------------------------
+
+
+Function: Epoch2DateTime_sp
+--------------------------------------------------
+Description: Convert DateTime to Epoch
+Usage: Epoch2DateTime_sp epochNum
+Parameter: epochNum
+Return: stdout
+Example:
+   My_epoch=`Epoch2DateTime_sp "2011-03-15 20:50:59"`
+--------------------------------------------------
+
+
+Function: ComputeTime_sp
+--------------------------------------------------
+Description: Add or substract time (in seconds) to date-time in format YYYY-MM-dd HH:mm:ss
+Usage: ComputeTime_sp "YYYY-MM-dd HH:mm:ss" seconds
+Parameter: "YYYY-MM-dd HH:mm:ss" - The date and time
+Parameter: seconds - The seconds. Add minus to substract number
+Return: stdout, variable (error msg)
+Example:
+  My_now=`GetNow_sp`
+  My_next_hour=`ComputeTime_sp "$My_now" 3600`
+--------------------------------------------------
+
+
+Function: ComputeMinute_sp
+--------------------------------------------------
+Description: Add or substract time (in minutes) to date-time in format YYYY-MM-dd HH:mm:ss
+Usage: ComputeMinute_sp "YYYY-MM-dd HH:mm:ss" seconds
+Parameter: "YYYY-MM-dd HH:mm:ss" - The date and time
+Parameter: minutes - The minutes. Add minus to substract number
+Return: stdout, variable (error msg)
+Example:
+  My_now=`GetNow_sp`
+  My_next_hour=`ComputeMinute_sp "$My_now" 45`
+--------------------------------------------------
+
+
+Function: ComputeHour_sp
+--------------------------------------------------
+Description: Add or substract time (in minutes) to date-time in format YYYY-MM-dd HH:mm:ss
+Usage: ComputeHour_sp "YYYY-MM-dd HH:mm:ss" seconds
+Parameter: "YYYY-MM-dd HH:mm:ss" - The date and time
+Parameter: minutes - The minutes. Add minus to substract number
+Return: stdout, variable (error msg)
+Example:
+  My_now=`GetNow_sp`
+  My_next_hour=`ComputeHour_sp "$My_now" 45`
+--------------------------------------------------
+
+
+Function: ComputeDay_sp
+--------------------------------------------------
+Description: Add or substract time (in minutes) to date-time in format YYYY-MM-dd HH:mm:ss
+Usage: ComputeDay_sp "YYYY-MM-dd HH:mm:ss" seconds
+Parameter: "YYYY-MM-dd HH:mm:ss" - The date and time
+Parameter: minutes - The minutes. Add minus to substract number
+Return: stdout, variable (error msg)
+Example:
+  My_now=`GetNow_sp`
+  My_next_hour=`ComputeDay_sp "$My_now" 45`
+--------------------------------------------------
+
+
+Function: ComputeYear_sp
+--------------------------------------------------
+Description: Compute year
+Usage: ComputeYear_sp YYYY num-of-year
+Parameter: YYYY - The date year
+Parameter: num-of-yearr - The number. Add minus to substract years
+Return: exit code, stdout, variable (error msg)
+Example:
+   My_newyear=`ComputeYear_sp 2011 -2` # My_newyear='2009'
+--------------------------------------------------
+
+
+Function: ComputeMonth_sp
+--------------------------------------------------
+Description: Compute year-mon
+Usage: ComputeMonth_sp YYYY-MM num-of-mon
+Parameter: YYYY-MM - The year-mon
+Parameter: num-of-mon - The number. Add minus to substract years
+Return: exit code, stdout, variable (error msg)
+Example:
+   My_newmon=`ComputeMonth_sp 2011-01 -2` # My_newyear='2010-11'
+--------------------------------------------------
+
+

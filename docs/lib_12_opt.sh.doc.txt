@@ -1,0 +1,76 @@
+File: lib_opt.sh
+==================================================
+Description: Shell funcion for commmand line options.
+Dependency: lib_misc.sh
+Author: Allen Zhao
+Email: allen.zhao@gmail.com
+==================================================
+
+
+Function: AddOption_sp
+--------------------------------------------------
+Description: Add an option to options
+Usage: AddOption_sp options_name short long number-of-args required description
+Parameter: options_name - A uniq options name (Alphabeta only)
+Parameter: short - short option letter
+Parameter: long - long option word
+Parameter: number-of-args - number of args follows this option
+Parameter: required - indicate it is a required option or not. y: required; n: not-required
+Parameter: description - The description of the option
+Return: exit code
+Example:
+  AddOption_sp $MyName a all 0 n "List all data"
+--------------------------------------------------
+
+
+Function: ParseOptions_sp
+--------------------------------------------------
+Description: Parse the command line options
+Usage: ParseOptions_sp optinons_name args
+Parameter: options_name - A uniq options name (Alphabeta only)
+Parameter: args - The args user passes in
+Return: exit code, variable
+Example:
+  ParseOptions_sp "$PROGNAME_SP" arg1 ...
+--------------------------------------------------
+
+
+Function: HasOption_sp
+--------------------------------------------------
+Description: Check if user has entered option x
+Usage: HasOption_sp option_name short|long
+Parameter: options_name - A uniq options name (Alphabeta only)
+Parameter: short|long - The option wiht long or short name
+Return: exit_code
+Example:
+  HasOption_sp "$PROGNAME_SP" a
+--------------------------------------------------
+
+
+Function: GetOptionValue_sp
+--------------------------------------------------
+Description: Retrive the option value
+Usage: GetOptionValue_sp option_name short|long [n]
+Parameter: options_name - A uniq options name (Alphabeta only)
+Parameter: short|long - The option short or long name
+Parameter: n - The nth value
+Return: exit_code, stdout
+Example:
+  GetOptionValue_sp "$PROGNAME_SP" a
+--------------------------------------------------
+
+
+Function: DispOptionsUsage_sp
+--------------------------------------------------
+Description: Print defined options usage
+Usage: DispOptionsUsage_sp option_name [-t title] [-e errormsg] [-d Description ...]
+Parameter: options_name - A uniq options name (Alphabeta only)
+Parameter: -t title - Specify the usage title.
+Parameter: -e errormsg - Display extra error message.
+Parameter: -d Description - Display extra description. You can have muliple options to split the lines
+Return: exit code, stdout
+Example:
+  DispOptionsUsage_sp
+--------------------------------------------------
+
+

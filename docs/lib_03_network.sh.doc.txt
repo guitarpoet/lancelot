@@ -1,0 +1,56 @@
+File: lib_network.sh
+==================================================
+Description: Network shell functions
+Author: Allen Zhao
+Email: allen.zhao@gmail.com
+==================================================
+
+
+Function: IsHostAlive_sp
+--------------------------------------------------
+Description: Check if host is alive
+Usage: IsHostAlive_sp host-name
+Return: exit code
+Example:
+  if IsHostAlive_sp $myhost ; then
+      copyFiles
+  fi
+--------------------------------------------------
+
+
+Function: GetHostIP_sp
+--------------------------------------------------
+Description: Get IP by host-name
+Usage: GetHostIP_sp host-name
+Return: std out
+Example:
+  My_IP=`GetHostIP_sp $My_Host`
+Only return the first IP for DNS robin domain
+--------------------------------------------------
+
+
+Function: GetHostFQDN_sp
+--------------------------------------------------
+Description: Get FQDN by host-name
+Usage: GetHostFQDN_sp host-name
+Return: std out
+Example:
+  My_FQDN=`GetHostFQDN_sp $My_Host`
+Only return the first entry for DNS robin domain
+--------------------------------------------------
+
+
+Function: IsLocalPortOpen_sp
+--------------------------------------------------
+Description: Check if user exists
+Usage: IsLocalPortOpen_sp port
+Parameter: port
+Return: exit code
+Example:
+   if IsLocalPortOpen_sp 443 ; then
+        DoSomething
+   fi
+Note: This funcion not works well for port with IP
+--------------------------------------------------
+
+

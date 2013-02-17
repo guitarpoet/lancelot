@@ -1,0 +1,82 @@
+File: lib_process.sh
+==================================================
+Description: Common Process shell functions.
+Dependency: lib_misc.sh, lib_os.sh, lib_dt.sh
+Author: Allen Zhao
+Email: allen.zhao@gmail.com
+==================================================
+
+
+Required Global Variable
+--------------------------------------------------
+    PROGNAME_SP - The top script name must be initianlized in your own script. Please see template.sh.
+
+
+Function: IsProcRunning_sp
+--------------------------------------------------
+Description: Check if a process is running
+Usage: IsProcRunning_sp pid
+Parameter: pid
+Return: return code
+Example:
+  IsProcRunning_sp 1234
+--------------------------------------------------
+
+
+Function: ProcWatchDog_sp
+--------------------------------------------------
+Description: Run a process and wathc it. If is not finished in certain time, terminate it.
+Usage: ProcWatchDog_sp timeout check-interval program args
+Parameter: timeout - If procese run time over this, it will be killed
+Parameter: check-interval - Process check interval
+Return: return code
+Example:
+  ProcWatchDog_sp 3600 60 My_Prog arg1 arg2
+--------------------------------------------------
+
+
+Function: Pargs_sp
+--------------------------------------------------
+Description: A replacement of Solaris pargs
+Usage: Pargs_sp pid
+Parameter: pid
+Return: stdout, exit code
+Example:
+    Pargs_sp 1234
+--------------------------------------------------
+
+
+Function: Penvs_sp
+--------------------------------------------------
+Description: A replacement of Solaris pargs -e
+Usage: Penvs_sp pid
+Parameter: pid
+Return: stdout, exit code
+Example:
+    Penvs_sp 1234
+--------------------------------------------------
+
+
+Function: StartDaemon_sp
+--------------------------------------------------
+Description: Start a script in daemon mode
+Usage: StartDaemon_sp /path/to/script script-args ...
+Parameter: /path/to/script
+Parameter: script-args
+Return: stdout, exit code
+Example:
+    StartDaemon_sp /path/to/AppServer.sh -opt
+--------------------------------------------------
+
+
+Function: StopDaemon_sp
+--------------------------------------------------
+Description: Stop a running daemon (kill -9)
+Usage: StopDaemon_sp /path/to/script
+Parameter: /path/to/script
+Return: stdout, exit code
+Example:
+    StopDaemon_sp /path/to/AppServer.sh
+--------------------------------------------------
+
+
