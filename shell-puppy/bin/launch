@@ -31,21 +31,10 @@ export LANCELOT_DEBUG=1
 usage() {
     DispOptionsUsage_sp template -t "Lancelot Launch" \
 		-d "The process launching script." \
+		-d "Example:" \
+		-d "launch -o /tmp/a-{}.log -e /tmp/a-{}.err -w /tmp /bin/ls ." \
     	-d "Email to guitarpoet@gmail.com if bug found."
 }
-
-doList() {
-    $PRINT "You call list function"
-}
-
-doRun() {
-    $PRINT "You call run function with arg $1"
-}
-
-doAll() {
-    $PRINT "You call all function"
-}
-
 
 ##########################################################################
 # Initialization
@@ -57,7 +46,7 @@ confFile_SP=$PATHNAME_SP/../conf/config.sh
 if [ -r $confFile_SP ]; then
     . $confFile_SP 2>&1 1>/dev/null
 else
-    echo "$confFile_SP not found! Exit." 1>&2
+    $PRINT "$confFile_SP not found! Exit." 1>&2
     exit 1
 fi
 
@@ -81,7 +70,7 @@ if HasOption_sp template c ; then # If has configuration file, include it
 	then
 		. $config_SP 2>&1 1>/dev/null
 	else
-		echo "Configuration file $config_SP is not exist or can't be readed."
+		$PRINT "Configuration file $config_SP is not exist or can't be readed."
 	fi
 fi
 
@@ -91,7 +80,7 @@ if HasOption_sp template w ; then # Set the variable of working dir
 	then
 		export LANCELOT_WORKINGDIR="$workingdir_SP"
 	else
-		echo "The working dir $workingdir_SP is not exist."
+		$PRINT "The working dir $workingdir_SP is not exist."
 	fi
 fi
 
@@ -121,7 +110,7 @@ if HasOption_sp template h ; then # Set the variable of the hosts file
 	then
 		export LANCELOT_HOSTS="$hosts_SP"
 	else
-		echo "Hosts file $hosts_SP is not exist or readable."
+		$PRINT "Hosts file $hosts_SP is not exist or readable."
 	fi
 fi
 
@@ -132,7 +121,9 @@ fi
 
 if [ ! $LANCELOT_PID ];
 then
-	echo "Please provide the pid template."
+	$PRINT "Error!!!"
+	$PRINT "Please provide the pid template."
+	$PRINT
 	usage
 	exit 1
 fi
@@ -175,7 +166,7 @@ then
 	then
 		TEMP_HOST_SP="localhost"
 	fi
-	echo "We are going to launch application with command { $LANCELOT_CMD } at working dir $LANCELOT_WORKINGDIR \
+	$PRINT "We are going to launch application with command { $LANCELOT_CMD } at working dir $LANCELOT_WORKINGDIR \
 with pid template $LANCELOT_PID number of $LANCELOT_NUMBER to hosts $TEMP_HOST_SP output to\
  $TEMP_OUTPUT_SP and error output to $TEMP_ERROR_SP"
 fi
@@ -185,13 +176,13 @@ case $DAMONTOOL in
 nohup)
 	for ((i=1; i<=$LANCELOT_NUMBER; i++))
 	do
-		pidf_SP=`echo $LANCELOT_PID | sed s/\{\}/$i/`
+		pidf_SP=`$PRINT $LANCELOT_PID | sed s/\{\}/$i/`
 		if [ $LANCELOT_OUTPUT ]; # If has output template
 		then
-			output_SP=`echo $LANCELOT_OUTPUT | sed s/\{\}/$i/`
+			output_SP=`$PRINT $LANCELOT_OUTPUT | sed s/\{\}/$i/`
 			if [ $LANCELOT_ERROR ]; # If has error output template
 			then
-				error_SP=`echo $LANCELOT_ERROR | sed s/\{\}/$i/`
+				error_SP=`$PRINT $LANCELOT_ERROR | sed s/\{\}/$i/`
 				 nohup sh -c "cd $LANCELOT_WORKINGDIR;$@" 1>$output_SP 2>$error_SP
 			else
 				 nohup sh -c "cd $LANCELOT_WORKINGDIR;$@" 1>$output_SP
@@ -199,25 +190,25 @@ nohup)
 		else
 			if [ $LANCELOT_ERROR ]; # If has error output template
 			then
-				error_SP=`echo $LANCELOT_ERROR | sed s/\{\}/$i/`
+				error_SP=`$PRINT $LANCELOT_ERROR | sed s/\{\}/$i/`
 				nohup sh -c "cd $LANCELOT_WORKINGDIR;$@" 2>$error_SP
 			else
 				nohup sh -c "cd $LANCELOT_WORKINGDIR;$@"
 			fi
 		fi
-		echo $! > $pidf_SP
+		$PRINT $! > $pidf_SP
 	done
 ;;
 daemonize)
 	for ((i=1; i<=$LANCELOT_NUMBER; i++))
 	do
-		pidf_SP=`echo $LANCELOT_PID | sed s/\{\}/$i/`
+		pidf_SP=`$PRINT $LANCELOT_PID | sed s/\{\}/$i/`
 		if [ $LANCELOT_OUTPUT ]; # If has output template
 		then
-			output_SP=`echo $LANCELOT_OUTPUT | sed s/\{\}/$i/`
+			output_SP=`$PRINT $LANCELOT_OUTPUT | sed s/\{\}/$i/`
 			if [ $LANCELOT_ERROR ]; # If has error output template
 			then
-				error_SP=`echo $LANCELOT_ERROR | sed s/\{\}/$i/`
+				error_SP=`$PRINT $LANCELOT_ERROR | sed s/\{\}/$i/`
 				daemonize -c $LANCELOT_WORKINGDIR -o $output_SP -e $error_SP -p $pidf_SP $@
 			else
 				daemonize -c $LANCELOT_WORKINGDIR -o $output_SP -p $pidf_SP $@
@@ -225,7 +216,7 @@ daemonize)
 		else
 			if [ $LANCELOT_ERROR ]; # If has error output template
 			then
-				error_SP=`echo $LANCELOT_ERROR | sed s/\{\}/$i/`
+				error_SP=`$PRINT $LANCELOT_ERROR | sed s/\{\}/$i/`
 				daemonize -c $LANCELOT_WORKINGDIR -e $error_SP -p $pidf_SP $@
 			else
 				daemonize -c $LANCELOT_WORKINGDIR -p $pidf_SP $@
@@ -234,6 +225,6 @@ daemonize)
 	done
 ;;
 esac
-echo Done
+$PRINT Done
 exit $?
 # End of script
