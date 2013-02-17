@@ -1,0 +1,66 @@
+File: lib_plock.sh
+==================================================
+Description: Parallel lock.
+Description: One of the useful scenario is to run specified number of parallel tasks
+Dependency: lib_misc.sh, lib_ui.sh
+Author: Allen Zhao
+Email: allen.zhao@gmail.com
+==================================================
+
+
+Required Global Variable
+--------------------------------------------------
+    PROGNAME_SP - The top script name must be initianlized in your own script. Please see template.sh.
+
+
+Function: ClearPLocks_sp
+--------------------------------------------------
+Description: Clear all plocks
+Usage: ClearPLocks_sp plocksName
+Parameter: plocksName
+Return: exit code
+Example:
+    ClearPLocks_sp
+--------------------------------------------------
+
+
+Function: InitPLocks_sp
+--------------------------------------------------
+Description: Initialize Plocks
+Usage: InitPLocks_sp plocksName] [num-of-plocks]
+Parameter: plocksName - Specify plocksName. Default is ${PROGNAME_SP}. Must be digits/letters only
+Parameter: num-of-plocks - Specify how many plocks default is 2
+Return: exit code, variable (error msg)
+Example:
+    ClearPLocks_sp
+--------------------------------------------------
+
+
+Function: GetParaLock_sp
+--------------------------------------------------
+Description: Get a parallel lock
+Usage: GetParaLock_sp plocksName [nowait]
+Parameter: plocksName
+Parameter: nowait - If get lock failed, return 1 (false). Defaultis wait and try again
+Return: exit code, stdout
+Example:
+    if GetParaLock_sp mylock ; then
+        DoSomething
+    fi
+--------------------------------------------------
+
+
+Function: ReleaseParaLock_sp
+--------------------------------------------------
+Description: Release a parallel lock
+Usage: ReleaseParaLock_sp plocksName lockNumber
+Parameter: plocksName
+Parameter: lockNumber - The index of the plock
+Return: exit code
+Example:
+    if GetParaLock_sp mylock ; then
+        DoSomething
+    fi
+--------------------------------------------------
+
+

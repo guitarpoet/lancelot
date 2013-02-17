@@ -1,0 +1,314 @@
+===================================================
+lib_00_os.sh
+===================================================
+
+Required Global Variables
+---------------------------------------------------
+  OS_TYPE_SP
+---------------------------------------------------
+
+Global Variables
+---------------------------------------------------
+  OS_RELEASE_SP
+  HARDWARE_PLATFORM_SP
+  MACHINE_NAME_SP
+  RUN_LEVEL_SP
+  HOSTNAME_SP
+---------------------------------------------------
+
+===================================================
+End of file lib_00_os.sh
+===================================================
+
+
+===================================================
+lib_01_misc.sh
+===================================================
+
+Public Functions
+---------------------------------------------------
+  GetRandomNum_sp
+  IsDigits_sp
+  GetSeq_sp
+  TrimSpace_sp
+  IsInCharSet_sp
+  IsAlphaNumeric_sp
+  IsNumber_sp
+  GetSubStr_sp
+  Str2Low_sp
+  Str2Upper_sp
+---------------------------------------------------
+
+===================================================
+End of file lib_01_misc.sh
+===================================================
+
+
+===================================================
+lib_02_user.sh
+===================================================
+
+Global Variables
+---------------------------------------------------
+  USER_ID_SP
+  USER_NAME_SP
+  REAL_USER_ID_SP
+  REAL_USER_NAME_SP
+  USER_FULLNAME_SP
+  REAL_USER_FULLNAME_SP
+  DEFAULT_GROUP_ID_SP
+  DEFAULT_GROUP_NAME_SP
+  REAL_DEFAULT_GROUP_ID_SP
+  REAL_DEFAULT_GROUP_NAME_SP
+  ALL_GROUP_IDS_SP
+  ALL_GROUP_NAMES_SP
+  USER_FROM_SP
+  IS_SUPER_USER_SP
+  IS_IN_SUPER_GROUP_SP
+---------------------------------------------------
+
+Public Functions
+---------------------------------------------------
+  IsUser_sp
+  IsInGroup_sp
+  IsSuperUser_sp
+  IsInSuperGroup_sp
+  GetUserName_sp
+  GetGroupName_sp
+  UserExist_sp
+  GroupExist_sp
+---------------------------------------------------
+
+===================================================
+End of file lib_02_user.sh
+===================================================
+
+
+===================================================
+lib_03_network.sh
+===================================================
+
+Public Functions
+---------------------------------------------------
+  IsHostAlive_sp
+  GetHostIP_sp
+  GetHostFQDN_sp
+  IsLocalPortOpen_sp
+---------------------------------------------------
+
+===================================================
+End of file lib_03_network.sh
+===================================================
+
+
+===================================================
+lib_04_dt.sh
+===================================================
+
+Public Functions
+---------------------------------------------------
+  GetTimeStamp_sp
+  GetTimeStamp2_sp
+  Month2Name_sp
+  Name2Month_sp
+  IsLeapYear_sp
+  GetPreYear_sp
+  GetNextYear_sp
+  GetDaysInMonth_sp
+  IsValidDate_sp
+  GetNextMonth_sp
+  GetPreMonth_sp
+  GetPreDay_sp
+  GetNextDay_sp
+  GetWeekday_sp
+  GetToday_sp
+  GetYesterady_sp
+  GetTomorrow_sp
+  GetThisMonth_sp
+  GetThisYear_sp
+  GetLastMonth_sp
+  GetLastYear_sp
+  GetNow_sp
+  IsValidTime_sp
+  IsValidDateTime_sp
+  DateTime2Epoch_sp
+  Epoch2DateTime_sp
+  ComputeTime_sp
+  ComputeMinute_sp
+  ComputeHour_sp
+  ComputeDay_sp
+  ComputeYear_sp
+  ComputeMonth_sp
+---------------------------------------------------
+
+===================================================
+End of file lib_04_dt.sh
+===================================================
+
+
+===================================================
+lib_05_file.sh
+===================================================
+
+Public Functions
+---------------------------------------------------
+  CheckFile_sp
+  IsRemoteFile_sp
+  CheckDir_sp
+  IsAbsPath_sp
+  MakeAbsPath_sp
+  MakeTemp_sp
+  RemoveTemp_sp
+  GetFileSize_sp
+  DFK_sp
+  GetDiskSpace_sp
+  GetFileStats_sp
+  GetFileDirAttributes_sp
+  GetFileDirOwnership_sp
+  IsFileDirChanged_sp
+  CreateBackup_sp
+---------------------------------------------------
+
+===================================================
+End of file lib_05_file.sh
+===================================================
+
+
+===================================================
+lib_11_log.sh
+===================================================
+
+Required Global Variables
+---------------------------------------------------
+  LOGS_SP
+  PROGNAME_SP
+---------------------------------------------------
+
+Global Variables
+---------------------------------------------------
+  LOG_DEBUG_SP
+  LOG_ERROR_SP
+  LOG_INFO_SP
+  LOG_WARN_SP
+---------------------------------------------------
+
+Public Functions
+---------------------------------------------------
+  Log_sp
+  InitLog_sp
+  LogPipe_sp
+---------------------------------------------------
+
+===================================================
+End of file lib_11_log.sh
+===================================================
+
+
+===================================================
+lib_12_opt.sh
+===================================================
+
+Public Functions
+---------------------------------------------------
+  AddOption_sp
+  ParseOptions_sp
+  HasOption_sp
+  GetOptionValue_sp
+  DispOptionsUsage_sp
+---------------------------------------------------
+
+===================================================
+End of file lib_12_opt.sh
+===================================================
+
+
+===================================================
+lib_13_process.sh
+===================================================
+
+Required Global Variables
+---------------------------------------------------
+  PROGNAME_SP
+---------------------------------------------------
+
+Public Functions
+---------------------------------------------------
+  IsProcRunning_sp
+  ProcWatchDog_sp
+  Pargs_sp
+  Penvs_sp
+  StartDaemon_sp
+  StopDaemon_sp
+---------------------------------------------------
+
+===================================================
+End of file lib_13_process.sh
+===================================================
+
+
+===================================================
+lib_14_ui.sh
+===================================================
+
+Public Functions
+---------------------------------------------------
+  YN_sp
+  InfoWait_sp
+  InfoExit_sp
+  PrintError_sp
+  ErrorExit_sp
+  ReadValue_sp
+  ReadPassword_sp
+  ReadPath_sp
+  Menu_sp
+---------------------------------------------------
+
+===================================================
+End of file lib_14_ui.sh
+===================================================
+
+
+===================================================
+lib_20_lock.sh
+===================================================
+
+Required Global Variables
+---------------------------------------------------
+  PROGNAME_SP
+---------------------------------------------------
+
+Public Functions
+---------------------------------------------------
+  LockMe_sp
+  AmILocked_sp
+  UnlockMe_sp
+  GetLockProcess_sp
+---------------------------------------------------
+
+===================================================
+End of file lib_20_lock.sh
+===================================================
+
+
+===================================================
+lib_21_plock.sh
+===================================================
+
+Required Global Variables
+---------------------------------------------------
+  PROGNAME_SP
+---------------------------------------------------
+
+Public Functions
+---------------------------------------------------
+  ClearPLocks_sp
+  InitPLocks_sp
+  GetParaLock_sp
+  ReleaseParaLock_sp
+---------------------------------------------------
+
+===================================================
+End of file lib_21_plock.sh
+===================================================
+
+

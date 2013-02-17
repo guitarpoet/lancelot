@@ -1,0 +1,69 @@
+File: lib_log.sh
+==================================================
+Description: Log shell functions.
+Description: Support unlimited log files in one script
+Dependency: lib_dt.sh, lib_misc.sh
+Author: Allen Zhao
+Email: allen.zhao@gmail.com
+==================================================
+
+
+Required Global Variable
+--------------------------------------------------
+    LOGS_SP - The default log directory
+    PROGNAME_SP - The top script name must be initianlized in your own script. Please see template.sh.
+
+
+Global Variable
+--------------------------------------------------
+    LOG_DEBUG_SP - The log level debug
+    LOG_ERROR_SP - The log level error
+    LOG_INFO_SP - The log level info
+    LOG_WARN_SP - The log level warning
+
+
+Function: Log_sp
+--------------------------------------------------
+Description: Write log message to log
+Usage: Log_sp handler level msg1 msg2 ...
+Parameter: handler - The log handler
+Parameter: level - The log msg level
+Parameter: msgs - The log message - could be multiple lines
+Return: none
+Example:
+  Log_sp 0 $LOG_DEBUG_SP "Save file ..."
+--------------------------------------------------
+
+
+Function: InitLog_sp
+--------------------------------------------------
+Description: Init a log file
+Usage: InitLog_sp [-handler|-h log-handler] [-dir|-d logDir] [-prefix|-p logPrefix] [-screen|-s] [-level|-l logLevel]
+Parameter: -handler|-h log-handler - Specifiy log handerl. Must be digits or letters
+Parameter: -level|-l log-level - Specifiy initial log level
+Parameter: -dir|-d - Specify log directory
+Parameter: -prefix|-p - Specify log prefix
+Parameter: -screen|-s - Set screen flag.
+Return: none
+Example:
+  InitLog_sp
+      Initialize log handler 0 under default log-dir with prefix $PROGNAME or "log"
+  InitLog_sp -x blah
+      You provide wrong information. So it does same as "InitLog_sp"
+  InitLog_sp -h 4 -d $My_LogDir -p sysBackup -s
+      Initialize log handler 4 under default $My_LogDir with prefix sysBackup and print log on screen too
+--------------------------------------------------
+
+
+Function: LogPipe_sp
+--------------------------------------------------
+Description: Read log msg from pipeline and write Info log
+Usage: | LogPipe_sp handler level
+Parameter: handler - The log handler
+Parameter: level - The log level
+Return: none
+Example:
+  MyProg | LogPipe_sp 0 $LOG_DEBUG_SP
+--------------------------------------------------
+
+
