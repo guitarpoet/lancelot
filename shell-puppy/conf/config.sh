@@ -16,6 +16,7 @@
 ##################################################
 APPHOME_SP=/Users/jack/Workbench/projects/tools/lancelot/shell-puppy
 LOADALLLIB_SP=y
+DAMONTOOL=nohup
 
 ##################################################
 # Application Directories

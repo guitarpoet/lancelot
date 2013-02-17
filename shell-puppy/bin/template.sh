@@ -18,7 +18,7 @@ TEMPLATE_VERSION="0.1"
 
 ##################################################
 # @ Function: usage
-# @ Description: Display usage
+# @ Description: Display usage for lancelot
 # @ Usage: usage
 # @ Return: none
 # @ Example:
@@ -26,7 +26,7 @@ TEMPLATE_VERSION="0.1"
 # @ End of function
 ##################################################
 usage() {
-    DispOptionsUsage_sp template -t "Shell-puppy template script" -d "This is an example script." \
+    DispOptionsUsage_sp template -t "template script" -d "This is an example script." \
        -d "Please report bug to YourName@YourCompany.com"
 }
 

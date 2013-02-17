@@ -1,0 +1,239 @@
+#!/bin/sh
+
+##########################################################################
+# $Id: lancelot launch 0.1 Sun Feb 17 15:13:35 2013 guitarpoet@gmail.com $
+##########################################################################
+# @ File: lancelot launch
+# @ Description: 
+#   This script is for spawning and managing multiple processes on\
+#   multiple machines. It will use taktuk to handle the execution \
+#                
+# @ Author: Jack
+# @ Version: 0.1
+# @ Email: guitarpoet@gmail.com
+# @ End of file
+##########################################################################
+
+##########################################################################
+# Functions
+##########################################################################
+
+##########################################################################
+# @ Function: usage
+# @ Description: Display usage for lancelot
+# @ Usage: usage
+# @ Return: none
+# @ Example:
+# @   usage
+# @ End of function
+##########################################################################
+export LANCELOT_DEBUG=1
+usage() {
+    DispOptionsUsage_sp template -t "Lancelot Launch" \
+		-d "The process launching script." \
+    	-d "Email to guitarpoet@gmail.com if bug found."
+}
+
+doList() {
+    $PRINT "You call list function"
+}
+
+doRun() {
+    $PRINT "You call run function with arg $1"
+}
+
+doAll() {
+    $PRINT "You call all function"
+}
+
+
+##########################################################################
+# Initialization
+##########################################################################
+# Setup the env
+PROGNAME_SP=`basename $0`
+PATHNAME_SP=`dirname $0`
+confFile_SP=$PATHNAME_SP/../conf/config.sh
+if [ -r $confFile_SP ]; then
+    . $confFile_SP 2>&1 1>/dev/null
+else
+    echo "$confFile_SP not found! Exit." 1>&2
+    exit 1
+fi
+
+##########################################################################
+# Main
+##########################################################################
+
+AddOption_sp template w workingdir 1 n "The working dir for the launch"
+AddOption_sp template o output 1 n "The standard output of the application"
+AddOption_sp template e error 1 n "The error output of the appliaction"
+AddOption_sp template p pid 1 y "The pid template for the application"
+AddOption_sp template c config 1 n "The configuration file location for lancelot launch"
+AddOption_sp template n number 1 n "The process number that want lancelot to launch"
+AddOption_sp template h hosts 1 n "The hosts that should launch the lancelot launch"
+
+ParseOptions_sp template "$@"
+
+if HasOption_sp template c ; then # If has configuration file, include it
+    config_SP=`GetOptionValue_sp template c`
+	if [ -r $config_SP ];
+	then
+		. $config_SP 2>&1 1>/dev/null
+	else
+		echo "Configuration file $config_SP is not exist or can't be readed."
+	fi
+fi
+
+if HasOption_sp template w ; then # Set the variable of working dir
+    workingdir_SP=`GetOptionValue_sp template w`
+	if [ -d $workingdir_SP ];
+	then
+		export LANCELOT_WORKINGDIR="$workingdir_SP"
+	else
+		echo "The working dir $workingdir_SP is not exist."
+	fi
+fi
+
+if HasOption_sp template o ; then # Set the variable of output template
+    output_SP=`GetOptionValue_sp template o`
+	export LANCELOT_OUTPUT="$output_SP"
+fi
+
+if HasOption_sp template e ; then # Set the variable of error output template
+    error_SP=`GetOptionValue_sp template e`
+	export LANCELOT_ERROR="$error_SP"
+fi
+
+if HasOption_sp template p ; then # Set the variable of pid template
+    pid_SP=`GetOptionValue_sp template p`
+	export LANCELOT_PID="$pid_SP"
+fi
+
+if HasOption_sp template n ; then # Set the variable of number of processes
+    number_SP=`GetOptionValue_sp template n`
+	export LANCELOT_NUMBER="$number_SP"
+fi
+
+if HasOption_sp template h ; then # Set the variable of the hosts file
+    hosts_SP=`GetOptionValue_sp template h`
+	if [ -r $hosts_SP ];
+	then
+		export LANCELOT_HOSTS="$hosts_SP"
+	else
+		echo "Hosts file $hosts_SP is not exist or readable."
+	fi
+fi
+
+if [ ! $LANCELOT_WORKINGDIR -a -d $LANCELOT_WORKINGDIR ];
+then
+	export LANCELOT_WORKINGDIR="/var/run"
+fi
+
+if [ ! $LANCELOT_PID ];
+then
+	echo "Please provide the pid template."
+	usage
+	exit 1
+fi
+
+if [ ! $LANCELOT_NUMBER ];
+then
+	export LANCELOT_NUMBER=1
+fi
+
+# Let's shift all the options to get the run command
+while [ $# -ne 0 ];
+do
+	if [[ $1 == -* ]];
+	then
+		shift
+		shift
+	else
+		break
+	fi
+done
+
+export LANCELOT_CMD=$@
+
+if [ $LANCELOT_DEBUG ];
+then
+	TEMP_OUTPUT_SP=$LANCELOT_OUTPUT
+	if [ ! $TEMP_OUTPUT_SP ];
+	then
+		TEMP_OUTPUT_SP="{Standard Input}"
+	fi
+
+	TEMP_ERROR_SP=$LANCELOT_ERROR
+	if [ ! $TEMP_ERROR_SP ];
+	then
+		TEMP_ERROR_SP="{Standard Output}"
+	fi
+
+	TEMP_HOST_SP=$LANCELOT_HOSTS
+	if [ ! $TEMP_HOST_SP ];
+	then
+		TEMP_HOST_SP="localhost"
+	fi
+	echo "We are going to launch application with command { $LANCELOT_CMD } at working dir $LANCELOT_WORKINGDIR \
+with pid template $LANCELOT_PID number of $LANCELOT_NUMBER to hosts $TEMP_HOST_SP output to\
+ $TEMP_OUTPUT_SP and error output to $TEMP_ERROR_SP"
+fi
+
+
+case $DAMONTOOL in
+nohup)
+	for ((i=1; i<=$LANCELOT_NUMBER; i++))
+	do
+		pidf_SP=`echo $LANCELOT_PID | sed s/\{\}/$i/`
+		if [ $LANCELOT_OUTPUT ]; # If has output template
+		then
+			output_SP=`echo $LANCELOT_OUTPUT | sed s/\{\}/$i/`
+			if [ $LANCELOT_ERROR ]; # If has error output template
+			then
+				error_SP=`echo $LANCELOT_ERROR | sed s/\{\}/$i/`
+				 nohup sh -c "cd $LANCELOT_WORKINGDIR;$@" 1>$output_SP 2>$error_SP
+			else
+				 nohup sh -c "cd $LANCELOT_WORKINGDIR;$@" 1>$output_SP
+			fi
+		else
+			if [ $LANCELOT_ERROR ]; # If has error output template
+			then
+				error_SP=`echo $LANCELOT_ERROR | sed s/\{\}/$i/`
+				nohup sh -c "cd $LANCELOT_WORKINGDIR;$@" 2>$error_SP
+			else
+				nohup sh -c "cd $LANCELOT_WORKINGDIR;$@"
+			fi
+		fi
+		echo $! > $pidf_SP
+	done
+;;
+daemonize)
+	for ((i=1; i<=$LANCELOT_NUMBER; i++))
+	do
+		pidf_SP=`echo $LANCELOT_PID | sed s/\{\}/$i/`
+		if [ $LANCELOT_OUTPUT ]; # If has output template
+		then
+			output_SP=`echo $LANCELOT_OUTPUT | sed s/\{\}/$i/`
+			if [ $LANCELOT_ERROR ]; # If has error output template
+			then
+				error_SP=`echo $LANCELOT_ERROR | sed s/\{\}/$i/`
+				daemonize -c $LANCELOT_WORKINGDIR -o $output_SP -e $error_SP -p $pidf_SP $@
+			else
+				daemonize -c $LANCELOT_WORKINGDIR -o $output_SP -p $pidf_SP $@
+			fi
+		else
+			if [ $LANCELOT_ERROR ]; # If has error output template
+			then
+				error_SP=`echo $LANCELOT_ERROR | sed s/\{\}/$i/`
+				daemonize -c $LANCELOT_WORKINGDIR -e $error_SP -p $pidf_SP $@
+			else
+				daemonize -c $LANCELOT_WORKINGDIR -p $pidf_SP $@
+			fi
+		fi
+	done
+;;
+esac
+echo Done
+exit $?
+# End of script

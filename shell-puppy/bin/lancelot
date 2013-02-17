@@ -11,25 +11,26 @@
 # @ Author: Jack
 # @ Email: guitarpoet@gmail.com
 # @ End of file
-##################################################
+###################################################################
 TEMPLATE_VERSION="0.1"
 
-##################################################
-# Put your functions here
-##################################################
+###################################################################
+# Functions
+###################################################################
 
-##################################################
+###################################################################
 # @ Function: usage
-# @ Description: Display usage
+# @ Description: Display usage for lancelot
 # @ Usage: usage
 # @ Return: none
 # @ Example:
 # @   usage
 # @ End of function
-##################################################
+###################################################################
 usage() {
-    DispOptionsUsage_sp template -t "Shell-puppy template script" -d "This is an example script." \
-       -d "Please report bug to YourName@YourCompany.com"
+    DispOptionsUsage_sp template -t "Lancelot" \
+		-d "The process management script" \
+    	-d "Email to guitarpoet@gmail.com if bug found"
 }
 
 doList() {
@@ -45,9 +46,9 @@ doAll() {
 }
 
 
-##################################################
+###################################################################
 # Initialization
-##################################################
+###################################################################
 # Setup the env
 PROGNAME_SP=`basename $0`
 PATHNAME_SP=`dirname $0`
@@ -59,11 +60,10 @@ else
     exit 1
 fi
 
-##################################################
+###################################################################
 # Main
-##################################################
-# Put your own code below
-##################################################
+###################################################################
+
 AddOption_sp template h help 0 n "Display this help"
 AddOption_sp template a all 0 n "Run all tests"
 AddOption_sp template l list 0 n "List all tests"
@@ -88,6 +88,4 @@ if HasOption_sp template r ; then
 fi
 
 usage
-
 # End of script
-
