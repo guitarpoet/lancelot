@@ -29,22 +29,19 @@ TEMPLATE_VERSION="0.1"
 ###################################################################
 usage() {
     DispOptionsUsage_sp template -t "Lancelot" \
-		-d "The process management script" \
+		-d "The process management script." \
+		-d "You can use this by sending the commands and command args to it." \
+		-d "To view the commands, use commands command" \
     	-d "Email to guitarpoet@gmail.com if bug found"
 }
 
-doList() {
-    $PRINT "You call list function"
+listCommands() {
+    $PRINT "commands:\n\tList all the commands"
+    $PRINT "help:\n\tShow the usage of how to use lancelot"
+    $PRINT "launch:\n\tProcess launcher"
+    $PRINT "status:\n\tView the daemon process status"
+    $PRINT "kill:\n\tKillthe daemon processes"
 }
-
-doRun() {
-    $PRINT "You call run function with arg $1"
-}
-
-doAll() {
-    $PRINT "You call all function"
-}
-
 
 ###################################################################
 # Initialization
@@ -56,7 +53,7 @@ confFile_SP=$PATHNAME_SP/../conf/config.sh
 if [ -r $confFile_SP ]; then
     . $confFile_SP 2>&1 1>/dev/null
 else
-    echo "$confFile_SP not found! Exit." 1>&2
+    $PRINT "$confFile_SP not found! Exit." 1>&2
     exit 1
 fi
 
@@ -65,27 +62,35 @@ fi
 ###################################################################
 
 AddOption_sp template h help 0 n "Display this help"
-AddOption_sp template a all 0 n "Run all tests"
-AddOption_sp template l list 0 n "List all tests"
-AddOption_sp template r run 1 n "Run a test. -r test-name"
 
 ParseOptions_sp template "$@"
 
-if HasOption_sp template l ; then
-    doList
+if HasOption_sp template h ; then
+    usage
     exit $?
 fi
 
-if HasOption_sp template a ; then
-    doAll
-    exit $?
+if [ $# -eq 0 ];
+then
+	usage
+	exit
 fi
 
-if HasOption_sp template r ; then
-    My_val=`GetOptionValue_sp template r`
-    doRun $My_val
-    exit $?
-fi
+LANCELOT_CMD=$1
+case $LANCELOT_CMD in
+help)
+	usage
+	exit
+;;
+commands)
+	listCommands
+	exit
+;;
+*)
+	shift
+	LANCELOT_ARGS=$@
+	$PATHNAME_SP/$LANCELOT_CMD $LANCELOT_ARGS
+;;
+esac
 
-usage
 # End of script
