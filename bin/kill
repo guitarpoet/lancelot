@@ -1,12 +1,12 @@
 #!/bin/sh
 
 ##########################################################################
-# $Id: lancelot status 0.1 Sun Feb 17 15:13:35 2013 guitarpoet@gmail.com $
+# $Id: lancelot kill   0.1 Sun Feb 17 15:13:35 2013 guitarpoet@gmail.com $
 ##########################################################################
-# @ File: lancelot status
+# @ File: lancelot kill
 # @ Description: 
-#   This script is for check the running status of the daemon processes\
-#   This script can use two kind of methods to check for the processes\
+#   This script is for kill the running daemon processes\
+#   This script can use two kind of methods to get the pid of processes\
 # 	1. Using the pid file pattern, for example /tmp/a-{}.pid, each process\
 # 	has the number for the name as the template
 #   2. Using the application pattern, using ps to grep the pids
@@ -32,10 +32,10 @@
 ##########################################################################
 export LANCELOT_DEBUG=1
 usage() {
-    DispOptionsUsage_sp template -t "Lancelot Status" \
-		-d "The process status script." \
+    DispOptionsUsage_sp template -t "Lancelot kill" \
+		-d "The process kill script." \
 		-d "Example:" \
-		-d "status -p /tmp/a-{}.pid" \
+		-d "kill -p /tmp/a-{}.pid" \
     	-d "Email to guitarpoet@gmail.com if bugs found."
 }
 
@@ -61,7 +61,6 @@ AddOption_sp template p pid 1 y "The pid template for the application"
 AddOption_sp template a application 1 n "The application pattern to grep"
 AddOption_sp template c config 1 n "The configuration file location for lancelot launch"
 AddOption_sp template h hosts 1 n "The hosts that should launch the lancelot launch"
-AddOption_sp template f format 1 n "The ps format for this application, 'pid args' is by default"
 
 ParseOptions_sp template "$@"
 
@@ -73,11 +72,6 @@ if HasOption_sp template c ; then # If has configuration file, include it
 	else
 		$PRINT "Configuration file $config_SP is not exist or can't be readed."
 	fi
-fi
-
-if HasOption_sp template f ; then # Set the variable of ps output template
-   	outputFormat_SP=`GetOptionValue_sp template f`
-	export LANCELOT_OUTPUT_FORMAT="$outputFormat_SP"
 fi
 
 if HasOption_sp template p ; then # Set the variable of pid template
@@ -109,11 +103,6 @@ then
 	exit 1
 fi
 
-if [ ! $LANCELOT_OUTPUT_FORMAT ];
-then
-	export LANCELOT_OUTPUT_FORMAT="pid args"
-fi
-
 if [ $LANCELOT_DEBUG ];
 then
 	TEMP_HOST_SP=$LANCELOT_HOSTS
@@ -121,7 +110,7 @@ then
 	then
 		TEMP_HOST_SP="localhost"
 	fi
-	$PRINT "We are going to check application with pid template { $LANCELOT_PID } or application pattern { $LANCELOT_APPLICATION } to hosts $TEMP_HOST_SP"
+	$PRINT "We are going to kill applications with pid template { $LANCELOT_PID } or application pattern { $LANCELOT_APPLICATION } to hosts $TEMP_HOST_SP"
 fi
 
 if [ $LANCELOT_PID ];
@@ -132,11 +121,11 @@ then
 	for pidf in $searchPattern
 	do
 		pid=`$CAT $pidf`
-		pids="$pid,$pids"
+		pids="$pid $pids"
 	done
-	$PS -p $pids -o "$LANCELOT_OUTPUT_FORMAT"
+	$KILL $pids
 else
-	$PS -A -o "$LANCELOT_OUTPUT_FORMAT" | $GREP -e "$LANCELOT_APPLICATION\|PID" | $GREP -v "$GREP" | $GREP -v -e "$PROGNAME_SP -a $LANCELOT_APPLICATION"
+	$PS -A -o "pid args" | $GREP -e "$LANCELOT_APPLICATION" | $GREP -v "$GREP" | $GREP -v -e "$PROGNAME_SP -a $LANCELOT_APPLICATION" | $AWK '{print $1}' | $XARGS $KILL
 fi
 
 exit $?
