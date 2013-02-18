@@ -30,7 +30,6 @@
 # @   usage
 # @ End of function
 ##########################################################################
-export LANCELOT_DEBUG=1
 usage() {
     DispOptionsUsage_sp template -t "Lancelot Status" \
 		-d "The process status script." \

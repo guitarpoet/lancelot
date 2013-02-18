@@ -27,6 +27,8 @@ TEMPLATE_VERSION="0.1"
 # @   usage
 # @ End of function
 ###################################################################
+
+export LANCELOT_HOME=/usr/local/lancelot
 usage() {
     DispOptionsUsage_sp template -t "Lancelot" \
 		-d "The process management script." \
@@ -49,7 +51,7 @@ listCommands() {
 # Setup the env
 PROGNAME_SP=`basename $0`
 PATHNAME_SP=`dirname $0`
-confFile_SP=$PATHNAME_SP/../conf/config.sh
+confFile_SP=$LANCELOT_HOME/conf/config.sh
 if [ -r $confFile_SP ]; then
     . $confFile_SP 2>&1 1>/dev/null
 else
@@ -89,7 +91,7 @@ commands)
 *)
 	shift
 	LANCELOT_ARGS=$@
-	$PATHNAME_SP/$LANCELOT_CMD $LANCELOT_ARGS
+	$LANCELOT_HOME/bin/$LANCELOT_CMD $LANCELOT_ARGS
 ;;
 esac
 
