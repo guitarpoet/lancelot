@@ -101,6 +101,7 @@ AddOption_sp() {
     $EVAL "OPT_SP_${My_AddOption_sp_name}_${My_AddOption_sp_short}_desc=\"$My_AddOption_sp_desc\""
     $EVAL "OPT_SP_${My_AddOption_sp_name}_${My_AddOption_sp_short}_n=\"$My_AddOption_sp_n\""
     $EVAL "OPT_SP_${My_AddOption_sp_name}_${My_AddOption_sp_short}_required=\"$My_AddOption_sp_required\""
+
     return 0
 }
 
@@ -122,6 +123,7 @@ ParseOptions_sp() {
     }
     shift
     while [ $# -ne 0 ]; do
+	echo $1 >> /tmp/trace.out
         if My_ParseOptions_sp_short=`Private_PrepareOption_sp "$My_ParseOptions_sp_name" "$1"` ; then
             shift
             $EVAL "My_ParseOptions_sp_n=\"\$OPT_SP_${My_ParseOptions_sp_name}_${My_ParseOptions_sp_short}_n\""

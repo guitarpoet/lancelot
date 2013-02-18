@@ -14,7 +14,7 @@
 ##################################################
 # Please CHANGE this to the absolute location in your system
 ##################################################
-APPHOME_SP=/Users/jack/Workbench/projects/tools/lancelot/shell-puppy
+APPHOME_SP=/usr/local/lancelot
 LOADALLLIB_SP=y
 DAMONTOOL=nohup
 
