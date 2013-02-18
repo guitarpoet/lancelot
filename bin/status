@@ -1,0 +1,171 @@
+#!/bin/sh
+
+##########################################################################
+# $Id: lancelot status 0.1 Sun Feb 17 15:13:35 2013 guitarpoet@gmail.com $
+##########################################################################
+# @ File: lancelot status
+# @ Description: 
+#   This script is for check the running status of the daemon processes\
+#   This script can use two kind of methods to check for the processes\
+# 	1. Using the pid file pattern, for example /tmp/a-{}.pid, each process\
+# 	has the number for the name as the template
+#   2. Using the application pattern, using ps to grep the pids
+#                
+# @ Author: Jack
+# @ Version: 0.1
+# @ Email: guitarpoet@gmail.com
+# @ End of file
+##########################################################################
+
+##########################################################################
+# Functions
+##########################################################################
+
+##########################################################################
+# @ Function: usage
+# @ Description: Display usage for lancelot
+# @ Usage: usage
+# @ Return: none
+# @ Example:
+# @   usage
+# @ End of function
+##########################################################################
+export LANCELOT_DEBUG=1
+usage() {
+    DispOptionsUsage_sp template -t "Lancelot Status" \
+		-d "The process status script." \
+		-d "Example:" \
+		-d "status -o /tmp/a-{}.log -e /tmp/a-{}.err -p /tmp/a-{}.pid" \
+    	-d "Email to guitarpoet@gmail.com if bugs found."
+}
+
+##########################################################################
+# Initialization
+##########################################################################
+# Setup the env
+PROGNAME_SP=`basename $0`
+PATHNAME_SP=`dirname $0`
+confFile_SP=$PATHNAME_SP/../conf/config.sh
+if [ -r $confFile_SP ]; then
+    . $confFile_SP 2>&1 1>/dev/null
+else
+    $PRINT "$confFile_SP not found! Exit." 1>&2
+    exit 1
+fi
+
+##########################################################################
+# Main
+##########################################################################
+
+AddOption_sp template o output 1 n "The standard output of the application"
+AddOption_sp template e error 1 n "The error output of the appliaction"
+AddOption_sp template p pid 1 y "The pid template for the application"
+AddOption_sp template a application 1 n "The application pattern to grep"
+AddOption_sp template c config 1 n "The configuration file location for lancelot launch"
+AddOption_sp template h hosts 1 n "The hosts that should launch the lancelot launch"
+AddOption_sp template f format 1 n "The ps format for this application, 'pid args' is by default"
+
+ParseOptions_sp template "$@"
+
+if HasOption_sp template c ; then # If has configuration file, include it
+	config_SP=`GetOptionValue_sp template c`
+	if [ -r $config_SP ];
+	then
+		. $config_SP 2>&1 1>/dev/null
+	else
+		$PRINT "Configuration file $config_SP is not exist or can't be readed."
+	fi
+fi
+
+if HasOption_sp template o ; then # Set the variable of output template
+   	output_SP=`GetOptionValue_sp template o`
+	export LANCELOT_OUTPUT="$output_SP"
+fi
+
+if HasOption_sp template f ; then # Set the variable of ps output template
+   	outputFormat_SP=`GetOptionValue_sp template f`
+	export LANCELOT_OUTPUT_FORMAT="$outputFormat_SP"
+fi
+
+if HasOption_sp template e ; then # Set the variable of error output template
+	error_SP=`GetOptionValue_sp template e`
+	export LANCELOT_ERROR="$error_SP"
+fi
+
+if HasOption_sp template p ; then # Set the variable of pid template
+    	pid_SP=`GetOptionValue_sp template p`
+	export LANCELOT_PID="$pid_SP"
+fi
+
+if HasOption_sp template a ; then # Set the variable of pid template
+    	app_SP=`GetOptionValue_sp template a`
+	export LANCELOT_APPLICATION="$app_SP"
+fi
+
+if HasOption_sp template h ; then # Set the variable of the hosts file
+    	hosts_SP=`GetOptionValue_sp template h`
+	if [ -r $hosts_SP ];
+	then
+		export LANCELOT_HOSTS="$hosts_SP"
+	else
+		$PRINT "Hosts file $hosts_SP is not exist or readable."
+	fi
+fi
+
+if [ ! $LANCELOT_PID ] && [ ! $LANCELOT_APPLICATION ];
+then
+	echo $LANCELOT_PID
+	echo $LANCELOT_APPLICATION
+	$PRINT "Error!!!"
+	$PRINT "Please provide either the pid template or application pattern."
+	$PRINT
+	usage
+	exit 1
+fi
+
+if [ ! $LANCELOT_OUTPUT_FORMAT ];
+then
+	export LANCELOT_OUTPUT_FORMAT="pid args"
+fi
+
+if [ $LANCELOT_DEBUG ];
+then
+	TEMP_OUTPUT_SP=$LANCELOT_OUTPUT
+	if [ ! $TEMP_OUTPUT_SP ];
+	then
+		TEMP_OUTPUT_SP="{ Standard Input }"
+	fi
+
+	TEMP_ERROR_SP=$LANCELOT_ERROR
+	if [ ! $TEMP_ERROR_SP ];
+	then
+		TEMP_ERROR_SP="{ Standard Output }"
+	fi
+
+	TEMP_HOST_SP=$LANCELOT_HOSTS
+	if [ ! $TEMP_HOST_SP ];
+	then
+		TEMP_HOST_SP="localhost"
+	fi
+	$PRINT "We are going to check application with pid template { $LANCELOT_PID } or application pattern { $LANCELOT_APPLICATION } \
+to hosts $TEMP_HOST_SP output to\
+$TEMP_OUTPUT_SP and error output to $TEMP_ERROR_SP"
+fi
+
+if [ $LANCELOT_PID ];
+then
+	# Let's check for all the pid files
+	searchPattern=`echo $LANCELOT_PID | sed s/{}/\*/`
+	pids=""
+	for pidf in $searchPattern
+	do
+		pid=`cat $pidf`
+		pids="$pid,$pids"
+	done
+	$PS -p $pids -o "$LANCELOT_OUTPUT_FORMAT"
+else
+	$PS -A -o "$LANCELOT_OUTPUT_FORMAT" | $GREP -e "$LANCELOT_APPLICATION\|PID" | $GREP -v "$GREP"
+fi
+
+exit $?
+# End of script

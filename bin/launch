@@ -183,17 +183,17 @@ nohup)
 			if [ $LANCELOT_ERROR ]; # If has error output template
 			then
 				error_SP=`$PRINT $LANCELOT_ERROR | sed s/\{\}/$i/`
-				 nohup sh -c "cd $LANCELOT_WORKINGDIR;$@" 1>$output_SP 2>$error_SP
+				 nohup sh -c "cd $LANCELOT_WORKINGDIR;$@" 1>$output_SP 2>$error_SP &
 			else
-				 nohup sh -c "cd $LANCELOT_WORKINGDIR;$@" 1>$output_SP
+				 nohup sh -c "cd $LANCELOT_WORKINGDIR;$@" 1>$output_SP &
 			fi
 		else
 			if [ $LANCELOT_ERROR ]; # If has error output template
 			then
 				error_SP=`$PRINT $LANCELOT_ERROR | sed s/\{\}/$i/`
-				nohup sh -c "cd $LANCELOT_WORKINGDIR;$@" 2>$error_SP
+				nohup sh -c "cd $LANCELOT_WORKINGDIR;$@" 2>$error_SP &
 			else
-				nohup sh -c "cd $LANCELOT_WORKINGDIR;$@"
+				nohup sh -c "cd $LANCELOT_WORKINGDIR;$@" &
 			fi
 		fi
 		$PRINT $! > $pidf_SP
