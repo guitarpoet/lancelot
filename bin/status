@@ -130,8 +130,14 @@ then
 	pids=""
 	for pidf in $searchPattern
 	do
-		pid=`$CAT $pidf`
-		pids="$pid,$pids"
+		if [ -r $pidf ];
+		then
+			pid=`$CAT $pidf`
+			pids="$pid,$pids"
+		else
+			$PRINT "No file readable for pid $pidf found"
+			exit 1
+		fi
 	done
 	$PS -p $pids -o "$LANCELOT_OUTPUT_FORMAT"
 else

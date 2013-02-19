@@ -91,7 +91,14 @@ commands)
 *)
 	shift
 	LANCELOT_ARGS=$@
-	$LANCELOT_HOME/bin/$LANCELOT_CMD $LANCELOT_ARGS
+	if [ -x $LANCELOT_HOME/bin/$LANCELOT_CMD ];
+	then
+		$LANCELOT_HOME/bin/$LANCELOT_CMD $LANCELOT_ARGS
+	else
+		$PRINT "Error!!!"
+		$PRINT "There is not command found for $LANCELOT_CMD"
+		exit 1
+	fi
 ;;
 esac
 
