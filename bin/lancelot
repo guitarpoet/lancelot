@@ -89,6 +89,20 @@ commands)
 	exit
 ;;
 *)
+	LANCELOT_DAEMONTOOL=`which daemonize` # We prefer use daemonize if installed
+
+	if [ $LANCELOT_DAEMONTOOL ];
+	then
+		LANCELOT_DAEMONTOOL="daemonize"
+	else
+		if [ `which nohup` ];
+		then
+			LANCELOT_DAEMONTOOL="nohup"
+		fi
+	fi
+
+	export LANCELOT_DAEMONTOOL
+
 	shift
 	LANCELOT_ARGS=$@
 	if [ -x $LANCELOT_HOME/bin/$LANCELOT_CMD ];

@@ -16,7 +16,6 @@
 ##################################################
 APPHOME_SP=/usr/local/lancelot
 LOADALLLIB_SP=y
-DAMONTOOL=nohup
 
 ##################################################
 # Application Directories

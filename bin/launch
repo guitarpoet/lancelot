@@ -170,8 +170,7 @@ with pid template $LANCELOT_PID number of $LANCELOT_NUMBER to hosts $TEMP_HOST_S
  $TEMP_OUTPUT_SP and error output to $TEMP_ERROR_SP"
 fi
 
-
-case $DAMONTOOL in
+case $LANCELOT_DAEMONTOOL in
 nohup)
 	for ((i=1; i<=$LANCELOT_NUMBER; i++))
 	do
@@ -222,6 +221,10 @@ daemonize)
 			fi
 		fi
 	done
+;;
+*)
+	echo $LANCELOT_DAEMONTOOL
+	$PRINT "You didn't have daemonize or nohup or at least lancelot can't find that, please install them."
 ;;
 esac
 $PRINT Done
