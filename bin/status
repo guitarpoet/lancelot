@@ -128,12 +128,19 @@ then
 	# Let's check for all the pid files
 	searchPattern=`$PRINT $LANCELOT_PID | $SED s/{}/\*/`
 	pids=""
+	first=1
 	for pidf in $searchPattern
 	do
 		if [ -r $pidf ];
 		then
 			pid=`$CAT $pidf`
-			pids="$pid,$pids"
+			if [ $first -eq 1 ];
+			then
+				pids="$pid"
+				first=0
+			else
+				pids="$pid,$pids"
+			fi
 		else
 			$PRINT "No file readable for pid $pidf found"
 			exit 1
