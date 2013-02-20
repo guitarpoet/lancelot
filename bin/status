@@ -75,7 +75,7 @@ if HasOption_sp template c ; then # If has configuration file, include it
 fi
 
 if HasOption_sp template f ; then # Set the variable of ps output template
-   	outputFormat_SP=`GetOptionValue_sp template f`
+   	outputFormat_SP=`GetOptionValue_sp template f | sed "s/#/ /g"`
 	export LANCELOT_OUTPUT_FORMAT="$outputFormat_SP"
 fi
 
@@ -108,7 +108,7 @@ then
 	exit 1
 fi
 
-if [ ! $LANCELOT_OUTPUT_FORMAT ];
+if [ ! "$LANCELOT_OUTPUT_FORMAT" ];
 then
 	export LANCELOT_OUTPUT_FORMAT="pid args"
 fi
