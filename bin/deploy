@@ -1,0 +1,135 @@
+#!/bin/sh
+
+##########################################################################
+# $Id: lancelot deploy 0.1 Sun Feb 17 15:13:35 2013 guitarpoet@gmail.com $
+##########################################################################
+# @ File: lancelot deploy
+# @ Description: 
+#   This script is for using taktuk to deploy the lancelot to multiple\
+#  	hosts.
+#                
+# @ Author: Jack
+# @ Version: 0.1
+# @ Email: guitarpoet@gmail.com
+# @ End of file
+##########################################################################
+
+##########################################################################
+# Functions
+##########################################################################
+
+##########################################################################
+# @ Function: usage
+# @ Description: Display usage for lancelot
+# @ Usage: usage
+# @ Return: none
+# @ Example:
+# @   usage
+# @ End of function
+##########################################################################
+usage() {
+    DispOptionsUsage_sp template -t "Lancelot Deploy" \
+		-d "The script to deploy lancelot to multiple hosts." \
+		-d "Example:" \
+		-d "deploy -h hosts" \
+    	-d "Email to guitarpoet@gmail.com if bugs found."
+}
+
+##########################################################################
+# Initialization
+##########################################################################
+# Setup the env
+PROGNAME_SP=`basename $0`
+PATHNAME_SP=`dirname $0`
+confFile_SP=$PATHNAME_SP/../conf/config.sh
+if [ -r $confFile_SP ]; then
+    . $confFile_SP 2>&1 1>/dev/null
+else
+    $PRINT "$confFile_SP not found! Exit." 1>&2
+    exit 1
+fi
+
+##########################################################################
+# Main
+##########################################################################
+
+AddOption_sp template d destination 1 y "The location for install lancelot to, use /usr/local/lancelot by default"
+AddOption_sp template l login 1 n "The login name for login using taktuk"
+AddOption_sp template c config 1 n "The configuration file location for lancelot deploy"
+AddOption_sp template h hosts 1 n "The hosts should deploy lancelot"
+
+ParseOptions_sp template "$@"
+
+if HasOption_sp template c ; then # If has configuration file, include it
+	config_SP=`GetOptionValue_sp template c`
+	if [ -r $config_SP ];
+	then
+		. $config_SP 2>&1 1>/dev/null
+	else
+		$PRINT "Configuration file $config_SP is not exist or can't be readed."
+	fi
+fi
+
+if HasOption_sp template d ; then # Set the variable of destination directory
+   	dest_SP=`GetOptionValue_sp template d`
+	export LANCELOT_DESTINATION="$dest_SP"
+fi
+
+if HasOption_sp template l ; then # Set the variable of taktuk login
+    login_SP=`GetOptionValue_sp template l`
+	export LANCELOT_LOGIN="$login_SP"
+fi
+
+if HasOption_sp template h ; then # Set the variable of the hosts file
+    	hosts_SP=`GetOptionValue_sp template h`
+	if [ -r $hosts_SP ];
+	then
+		export LANCELOT_HOSTS="$hosts_SP"
+	else
+		$PRINT "Hosts file $hosts_SP is not exist or readable."
+	fi
+fi
+
+if [ ! "$LANCELOT_HOSTS" ];
+then
+	$PRINT "Error!!!"
+	$PRINT "Please provide the hosts file to deploy lancelot."
+	$PRINT
+	usage
+	exit 1
+fi
+
+if [ ! "$LANCELOT_LOGIN" ];
+then
+	export LANCELOT_LOGIN="root"
+fi
+
+if [ ! "$LANCELOT_DESTINATION" ];
+then
+	export LANCELOT_DESTINATION=/usr/local/lancelot
+fi
+
+if [ ! $LANCELOT_DEBUG ];
+then
+	$PRINT "We are going to deploy lancelot to { $LANCELOT_HOSTS } location { $LANCELOT_DESTINATION } with login name { $LANCELOT_LOGIN }"
+fi
+
+# Now we need to tar lancelot to tmp folder
+
+LANCELOT_TMP=/tmp/lancelot
+
+$PRINT "Packing lancelot"
+$CP -r $LANCELOT_HOME $LANCELOT_TMP
+$RM -rf $LANCELOT_TMP/.git
+tar -C /tmp -zcvf $LANCELOT_TMP.tar.gz lancelot
+$PRINT "Copying lancelot to hosts $LANCELOT_HOSTS"
+taktuk -s -l $LANCELOT_LOGIN -f $LANCELOT_HOSTS broadcast put [ $LANCELOT_TMP.tar.gz ] [ /tmp ]
+rm -rf $LANCELOT_TMP
+$PRINT "Deploying lancelot to $LANCELOT_DESTINATION"
+
+DEST_DIR=`dirname $LANCELOT_DESTINATION`
+taktuk -s -l $LANCELOT_LOGIN -f $LANCELOT_HOSTS broadcast exec { tar -C $DEST_DIR -zxvf $LANCELOT_TMP.tar.gz }
+taktuk -s -l $LANCELOT_LOGIN -f $LANCELOT_HOSTS broadcast exec { ln $LANCELOT_DESTINATION/bin/lancelot /usr/local/bin/lancelot }
+
+exit $?
+# End of script
