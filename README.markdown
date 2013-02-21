@@ -1,4 +1,4 @@
-Lacenlot, a script to launch and management multiple processes
+Lacenlot, tool for manage multiple daemon processes
 ================================================================================
 
 Introduction & Purpose
