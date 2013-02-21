@@ -58,7 +58,6 @@ AddOption_sp template o output 1 n "The standard output of the application"
 AddOption_sp template e error 1 n "The error output of the appliaction"
 AddOption_sp template p pid 1 y "The pid template for the application"
 AddOption_sp template c config 1 n "The configuration file location for lancelot launch"
-AddOption_sp template h hosts 1 n "The hosts that should launch the lancelot launch"
 AddOption_sp template t count 1 n "The process count that want lancelot to launch"
 
 ParseOptions_sp template "$@"
@@ -101,16 +100,6 @@ fi
 if HasOption_sp template t ; then # Set the variable of number of processes
     	number_SP=`GetOptionValue_sp template t`
 	export LANCELOT_NUMBER="$number_SP"
-fi
-
-if HasOption_sp template h ; then # Set the variable of the hosts file
-    	hosts_SP=`GetOptionValue_sp template h`
-	if [ -r $hosts_SP ];
-	then
-		export LANCELOT_HOSTS="$hosts_SP"
-	else
-		$PRINT "Hosts file $hosts_SP is not exist or readable."
-	fi
 fi
 
 if [ ! $LANCELOT_WORKINGDIR -a -d $LANCELOT_WORKINGDIR ];

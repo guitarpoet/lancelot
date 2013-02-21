@@ -109,7 +109,16 @@ then
 	export LANCELOT_DESTINATION=/usr/local/lancelot
 fi
 
-if [ ! $LANCELOT_DEBUG ];
+echo $TAKTUK
+
+if [ ! "$TAKTUK" ];
+then
+	$PRINT "Error!!!"
+	$PRINT "No taktuk installed, please install taktuk then do the install."
+	exit 1
+fi
+
+if [ $LANCELOT_DEBUG ];
 then
 	$PRINT "We are going to deploy lancelot to { $LANCELOT_HOSTS } location { $LANCELOT_DESTINATION } with login name { $LANCELOT_LOGIN }"
 fi
@@ -121,15 +130,15 @@ LANCELOT_TMP=/tmp/lancelot
 $PRINT "Packing lancelot"
 $CP -r $LANCELOT_HOME $LANCELOT_TMP
 $RM -rf $LANCELOT_TMP/.git
-tar -C /tmp -zcvf $LANCELOT_TMP.tar.gz lancelot
+tar -C /tmp -zcf $LANCELOT_TMP.tar.gz lancelot
 $PRINT "Copying lancelot to hosts $LANCELOT_HOSTS"
-taktuk -s -l $LANCELOT_LOGIN -f $LANCELOT_HOSTS broadcast put [ $LANCELOT_TMP.tar.gz ] [ /tmp ]
-rm -rf $LANCELOT_TMP
+$TAKTUK -s -l $LANCELOT_LOGIN -f $LANCELOT_HOSTS broadcast put [ $LANCELOT_TMP.tar.gz ] [ /tmp ]
+$RM -rf $LANCELOT_TMP
 $PRINT "Deploying lancelot to $LANCELOT_DESTINATION"
 
 DEST_DIR=`dirname $LANCELOT_DESTINATION`
-taktuk -s -l $LANCELOT_LOGIN -f $LANCELOT_HOSTS broadcast exec { tar -C $DEST_DIR -zxvf $LANCELOT_TMP.tar.gz }
-taktuk -s -l $LANCELOT_LOGIN -f $LANCELOT_HOSTS broadcast exec { ln $LANCELOT_DESTINATION/bin/lancelot /usr/local/bin/lancelot }
+$TAKTUK -s -l $LANCELOT_LOGIN -f $LANCELOT_HOSTS broadcast exec { tar -C $DEST_DIR -zxf $LANCELOT_TMP.tar.gz }
+$TAKTUK -s -l $LANCELOT_LOGIN -f $LANCELOT_HOSTS broadcast exec { ln -f $LANCELOT_DESTINATION/bin/lancelot /usr/local/bin/lancelot }
 
 exit $?
 # End of script

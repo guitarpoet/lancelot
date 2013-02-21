@@ -86,6 +86,7 @@ Options:
 
 Lancelot Status
 --------------------------------------------------------------------------------
+
 Description: 
     The process status script.
     Example:
@@ -108,6 +109,7 @@ Options:
 
 Lancelot Kill
 --------------------------------------------------------------------------------
+
 Description: 
     The process kill script.
     Example:
@@ -124,3 +126,23 @@ Options:
     -c|--config:
         The configuration file location for lancelot launch
         This option requires 1 args.
+
+Lancelot Broadcast
+--------------------------------------------------------------------------------
+
+Description: 
+    Broadcast exec the lancelot command to all the hosts
+    Example:
+    broadcast -h ~/hosts status -p /tmp/a-{}.pid
+    Email to guitarpoet@gmail.com if bugs found.
+Options: 
+    -c|--config:
+        The configuration file location for lancelot broadcast
+        This option requires 1 args.
+    -h|--hosts:
+        The hosts that should launch the lancelot broadcast
+        This option requires 1 args.
+    -l|--login:
+        The login name for login using taktuk
+        This option requires 1 args.
+

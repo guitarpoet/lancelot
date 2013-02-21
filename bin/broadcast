@@ -1,0 +1,133 @@
+#!/bin/sh
+
+#############################################################################
+# $Id: lancelot broadcast 0.1 Sun Feb 17 15:13:35 2013 guitarpoet@gmail.com $
+#############################################################################
+# @ File: lancelot broadcast
+# @ Description: 
+#   This script is for broadcast exec lancelot commands to all the hosts
+#                
+# @ Author: Jack
+# @ Version: 0.1
+# @ Email: guitarpoet@gmail.com
+# @ End of file
+#############################################################################
+
+#############################################################################
+# Functions
+#############################################################################
+
+#############################################################################
+# @ Function: usage
+# @ Description: Display usage for lancelot
+# @ Usage: usage
+# @ Return: none
+# @ Example:
+# @   usage
+# @ End of function
+#############################################################################
+usage() {
+    DispOptionsUsage_sp template -t "Lancelot Broadcast" \
+		-d "Broadcast exec the lancelot command to all the hosts" \
+		-d "Example:" \
+		-d "broadcast -h ~/hosts status -p /tmp/a-{}.pid" \
+    	-d "Email to guitarpoet@gmail.com if bugs found."
+}
+
+#############################################################################
+# Initialization
+#############################################################################
+# Setup the env
+PROGNAME_SP=`basename $0`
+PATHNAME_SP=`dirname $0`
+confFile_SP=$PATHNAME_SP/../conf/config.sh
+if [ -r $confFile_SP ]; then
+    . $confFile_SP 2>&1 1>/dev/null
+else
+    $PRINT "$confFile_SP not found! Exit." 1>&2
+    exit 1
+fi
+
+#############################################################################
+# Main
+#############################################################################
+
+AddOption_sp template c config 1 n "The configuration file location for lancelot broadcast"
+AddOption_sp template h hosts 1 n "The hosts that should launch the lancelot broadcast"
+AddOption_sp template l login 1 n "The login name for login using taktuk"
+
+ParseOptions_sp template "$@"
+
+if HasOption_sp template c ; then # If has configuration file, include it
+	config_SP=`GetOptionValue_sp template c`
+	if [ -r $config_SP ];
+	then
+		. $config_SP 2>&1 1>/dev/null
+	else
+		$PRINT "Configuration file $config_SP is not exist or can't be readed."
+		exit 1;
+	fi
+fi
+
+if HasOption_sp template h ; then # Set the variable of the hosts file
+    	hosts_SP=`GetOptionValue_sp template h`
+	if [ -r $hosts_SP ];
+	then
+		export LANCELOT_HOSTS="$hosts_SP"
+	else
+		$PRINT "Error!!!"
+		$PRINT "Hosts file $hosts_SP is not exist or readable!!!"
+		exit 1;
+	fi
+fi
+
+if HasOption_sp template l ; then # Set the variable of taktuk login
+    login_SP=`GetOptionValue_sp template l`
+	export LANCELOT_LOGIN="$login_SP"
+fi
+
+if [ ! $LANCELOT_HOSTS ];
+then
+	$PRINT "Error!!!"
+	$PRINT "Please provide the hosts to invoke lancelot command"
+	$PRINT
+	usage
+	exit 1
+fi
+
+if [ ! $TAKTUK ];
+then
+	$PRINT "Error!!!"
+	$PRINT "No taktuk installed, can't use this command!"
+	exit 1
+fi
+
+if [ ! "$LANCELOT_LOGIN" ];
+then
+	export LANCELOT_LOGIN="root"
+fi
+
+# Let's shift all the options to get the run command
+while [ $# -ne 0 ];
+do
+	if [[ $1 == -* ]];
+	then
+		shift
+		shift
+	else
+		break
+	fi
+done
+
+export LANCELOT_CMD=$@
+
+LANCELOT_DEBUG=1
+if [ $LANCELOT_DEBUG ];
+then
+	$PRINT "We are going to broadcast exec use user { $LANCELOT_LOGIN } for lancelot command { $LANCELOT_CMD } to hosts $LANCELOT_HOSTS"
+fi
+
+$TAKTUK -s -l $LANCELOT_LOGIN -f $LANCELOT_HOSTS broadcast exec { lancelot $LANCELOT_CMD }
+
+exit $?
+# End of script

@@ -78,6 +78,15 @@ then
 	exit
 fi
 
+TAKTUK=`which taktuk`
+
+if [ "$TAKTUK" ];
+then
+	export TAKTUK
+else
+	$PRINT "Warn: You seems don't have taktuk installed, deploy and broadcast command won't execute."
+fi
+
 LANCELOT_CMD=$1
 case $LANCELOT_CMD in
 help)
@@ -115,5 +124,4 @@ commands)
 	fi
 ;;
 esac
-
 # End of script
