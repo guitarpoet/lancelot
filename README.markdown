@@ -60,89 +60,89 @@ For example:
 Lancelot Launch
 --------------------------------------------------------------------------------
 
-Description:     
-	The process launching script.    
-	Example:    launch -o /tmp/a-{}.log -e /tmp/a-{}.err -w /tmp /bin/ls .
-    Email to guitarpoet@gmail.com if bug found.
-Options:     
-	-w|--workingdir:        The working dir for the launch
-        This option requires 1 args.
-    -o|--output:
-        The standard output of the application
-        This option requires 1 args.
-    -e|--error:
-        The error output of the appliaction
-        This option requires 1 args.
-    -p|--pid:
-        The pid template for the application
-        This option requires 1 args.
-        Option is required.
-    -c|--config:
-        The configuration file location for lancelot launch
-        This option requires 1 args.
-    -t|--count:
-        The process count that want lancelot to launch
-        This option requires 1 args.
+	Description:     
+		The process launching script.    
+		Example:    launch -o /tmp/a-{}.log -e /tmp/a-{}.err -w /tmp /bin/ls .
+		Email to guitarpoet@gmail.com if bug found.
+	Options:     
+		-w|--workingdir:        The working dir for the launch
+			This option requires 1 args.
+		-o|--output:
+			The standard output of the application
+			This option requires 1 args.
+		-e|--error:
+			The error output of the appliaction
+			This option requires 1 args.
+		-p|--pid:
+			The pid template for the application
+			This option requires 1 args.
+			Option is required.
+		-c|--config:
+			The configuration file location for lancelot launch
+			This option requires 1 args.
+		-t|--count:
+			The process count that want lancelot to launch
+			This option requires 1 args.
 
 Lancelot Status
 --------------------------------------------------------------------------------
 
-Description: 
-    The process status script.
-    Example:
-    status -p /tmp/a-{}.pid
-    Email to guitarpoet@gmail.com if bugs found.
-Options: 
-    -p|--pid:
-        The pid template for the application
-        This option requires 1 args.
-        Option is required.
-    -a|--application:
-        The application pattern to grep
-        This option requires 1 args.
-    -c|--config:
-        The configuration file location for lancelot launch
-        This option requires 1 args.
-    -f|--format:
-        The ps format for this application, 'pid args' is by default
-        This option requires 1 args.
+	Description: 
+		The process status script.
+		Example:
+		status -p /tmp/a-{}.pid
+		Email to guitarpoet@gmail.com if bugs found.
+	Options: 
+		-p|--pid:
+			The pid template for the application
+			This option requires 1 args.
+			Option is required.
+		-a|--application:
+			The application pattern to grep
+			This option requires 1 args.
+		-c|--config:
+			The configuration file location for lancelot launch
+			This option requires 1 args.
+		-f|--format:
+			The ps format for this application, 'pid args' is by default
+			This option requires 1 args.
 
 Lancelot Kill
 --------------------------------------------------------------------------------
 
-Description: 
-    The process kill script.
-    Example:
-    kill -p /tmp/a-{}.pid
-    Email to guitarpoet@gmail.com if bugs found.
-Options: 
-    -p|--pid:
-        The pid template for the application
-        This option requires 1 args.
-        Option is required.
-    -a|--application:
-        The application pattern to grep
-        This option requires 1 args.
-    -c|--config:
-        The configuration file location for lancelot launch
-        This option requires 1 args.
+	Description: 
+		The process kill script.
+		Example:
+		kill -p /tmp/a-{}.pid
+		Email to guitarpoet@gmail.com if bugs found.
+	Options: 
+		-p|--pid:
+			The pid template for the application
+			This option requires 1 args.
+			Option is required.
+		-a|--application:
+			The application pattern to grep
+			This option requires 1 args.
+		-c|--config:
+			The configuration file location for lancelot launch
+			This option requires 1 args.
 
 Lancelot Broadcast
 --------------------------------------------------------------------------------
 
-Description: 
-    Broadcast exec the lancelot command to all the hosts
-    Example:
-    broadcast -h ~/hosts status -p /tmp/a-{}.pid
-    Email to guitarpoet@gmail.com if bugs found.
-Options: 
-    -c|--config:
-        The configuration file location for lancelot broadcast
-        This option requires 1 args.
-    -h|--hosts:
-        The hosts that should launch the lancelot broadcast
-        This option requires 1 args.
-    -l|--login:
-        The login name for login using taktuk
-        This option requires 1 args.
+	Description: 
+		Broadcast exec the lancelot command to all the hosts
+		Example:
+		broadcast -h ~/hosts status -p /tmp/a-{}.pid
+		Email to guitarpoet@gmail.com if bugs found.
+	Options: 
+		-c|--config:
+			The configuration file location for lancelot broadcast
+			This option requires 1 args.
+		-h|--hosts:
+			The hosts that should launch the lancelot broadcast
+			This option requires 1 args.
+		-l|--login:
+			The login name for login using taktuk
+			This option requires 1 args.
 
