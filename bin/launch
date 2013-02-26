@@ -59,8 +59,18 @@ AddOption_sp template e error 1 n "The error output of the appliaction"
 AddOption_sp template p pid 1 y "The pid template for the application"
 AddOption_sp template c config 1 n "The configuration file location for lancelot launch"
 AddOption_sp template t count 1 n "The process count that want lancelot to launch"
+AddOption_sp template i count 1 n "The launch interval for each processes"
 
 ParseOptions_sp template "$@"
+
+if HasOption_sp template i ;
+then
+	interval_SP=`GetOptionValue_sp template i`
+	if [ $interval_SP ];
+	then
+		LANCELOT_INTERVAL=$interval_SP
+	fi
+fi
 
 if HasOption_sp template c ; then # If has configuration file, include it
 	config_SP=`GetOptionValue_sp template c`
@@ -189,6 +199,10 @@ nohup)
 			fi
 		fi
 		$PRINT $! > $pidf_SP
+		if [ $LANCELOT_INTERVAL ];
+		then
+			$SLEEP $LANCELOT_INTERVAL
+		fi
 	done
 ;;
 daemonize)
@@ -213,6 +227,10 @@ daemonize)
 			else
 				daemonize -c $LANCELOT_WORKINGDIR -p $pidf_SP $@
 			fi
+		fi
+		if [ $LANCELOT_INTERVAL ];
+		then
+			$SLEEP $LANCELOT_INTERVAL
 		fi
 	done
 ;;
