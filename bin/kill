@@ -115,6 +115,7 @@ then
 	do
 		pid=`$CAT $pidf`
 		pids="$pid $pids"
+		$RM $pidf
 	done
 	$KILL $pids
 else
