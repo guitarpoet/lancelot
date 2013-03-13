@@ -60,15 +60,15 @@ ParseOptions_sp template "$@"
 
 if HasOption_sp template c ; then # If has configuration file, include it
 	config_SP=`GetOptionValue_sp template c`
-	if [ -r $config_SP ];
-	then
-		. $config_SP 2>&1 1>/dev/null
-	else
 		if [ -r $PWD/$config_SP ];
 		then
 			. $PWD/$config_SP 2>&1 1>/dev/null
 		else
-			$PRINT "Configuration file $config_SP is not exist or can't be readed."
+			if  [ -r $config_SP ];
+			then
+				. $config_SP 2>&1 1>/dev/null
+			else
+				$PRINT "Configuration file $config_SP is not exist or can't be readed."
 		fi
 	fi
 fi
