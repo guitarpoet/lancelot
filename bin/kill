@@ -113,9 +113,14 @@ then
 	pids=""
 	for pidf in $searchPattern
 	do
-		pid=`$CAT $pidf`
-		pids="$pid $pids"
-		$RM $pidf
+		if [ -r $pidf ];
+		then
+			pid=`$CAT $pidf`
+			pids="$pid $pids"
+			$RM $pidf
+		else
+			$PRINT "Pid file $pidf is not exists!!!"
+		fi
 	done
 	$KILL $pids
 else
