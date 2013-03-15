@@ -60,6 +60,7 @@ AddOption_sp template p pid 1 y "The pid template for the application"
 AddOption_sp template a application 1 n "The application pattern to grep"
 AddOption_sp template c config 1 n "The configuration file location for lancelot status"
 AddOption_sp template f format 1 n "The ps format for this application, 'pid args' is by default"
+AddOption_sp template l filter 1 n "The filter regex to filter the application"
 
 ParseOptions_sp template "$@"
 
@@ -81,6 +82,11 @@ fi
 if HasOption_sp template f ; then # Set the variable of ps output template
    	outputFormat_SP=`GetOptionValue_sp template f | sed "s/#/ /g"`
 	export LANCELOT_OUTPUT_FORMAT="$outputFormat_SP"
+fi
+
+if HasOption_sp template l ; then # Set the variable of filter
+	filter_SP=`GetOptionValue_sp template l`
+	export LANCELOT_FILTER="$filter_SP"
 fi
 
 if HasOption_sp template p ; then # Set the variable of pid template
@@ -119,7 +125,7 @@ fi
 
 if [ $LANCELOT_PID ];
 then
-	# Let's check for all the pid files
+	# Now check for all the pid files
 	searchPattern=`$PRINT $LANCELOT_PID | $SED s/{}/\*/`
 	pids=""
 	first=1
@@ -142,7 +148,12 @@ then
 	done
 	$PS -p $pids -o "$LANCELOT_OUTPUT_FORMAT"
 else
-	$PS -A -o "$LANCELOT_OUTPUT_FORMAT" | $GREP -e "$LANCELOT_APPLICATION\|PID" | $GREP -v "$GREP" | $GREP -v -e "$PROGNAME_SP -a $LANCELOT_APPLICATION"
+	if [ ! $LANCELOT_FILTER ];
+	then
+		$PS -A -o "$LANCELOT_OUTPUT_FORMAT" | $GREP -e "$LANCELOT_APPLICATION\|PID" | $GREP -v "$GREP" | $GREP -v -e "$PROGNAME_SP -a $LANCELOT_APPLICATION"
+	else
+		$PS -A -o "$LANCELOT_OUTPUT_FORMAT" | $GREP -e "$LANCELOT_APPLICATION\|PID" | $GREP -v "$GREP" | $GREP -v -e "$PROGNAME_SP -a $LANCELOT_APPLICATION" | $GREP -e "$LANCELOT_FILTER\|PID"
+	fi
 fi
 
 exit $?

@@ -59,6 +59,7 @@ fi
 AddOption_sp template p pid 1 y "The pid template for the application"
 AddOption_sp template a application 1 n "The application pattern to grep"
 AddOption_sp template c config 1 n "The configuration file location for lancelot kill"
+AddOption_sp template l filter 1 n "The filter regex to filter the application"
 
 ParseOptions_sp template "$@"
 
@@ -75,6 +76,11 @@ if HasOption_sp template c ; then # If has configuration file, include it
 				$PRINT "Configuration file $config_SP is not exist or can't be readed."
 		fi
 	fi
+fi
+
+if HasOption_sp template l ; then # Set the variable of filter
+	filter_SP=`GetOptionValue_sp template l`
+	export LANCELOT_FILTER="$filter_SP"
 fi
 
 if HasOption_sp template p ; then # Set the variable of pid template
@@ -124,7 +130,12 @@ then
 	done
 	$KILL $pids
 else
-	$PS -A -o "pid args" | $GREP -e "$LANCELOT_APPLICATION" | $GREP -v "$GREP" | $GREP -v -e "$PROGNAME_SP -a $LANCELOT_APPLICATION" | $AWK '{print $1}' | $XARGS $KILL
+	if [ ! $LANCELOT_FILTER ];
+	then
+		$PS -A -o "pid args" | $GREP -e "$LANCELOT_APPLICATION" | $GREP -v "$GREP" | $GREP -v -e "$PROGNAME_SP -a $LANCELOT_APPLICATION" | $AWK '{print $1}' | $XARGS $KILL
+	else
+		$PS -A -o "pid args" | $GREP -e "$LANCELOT_APPLICATION" | $GREP -v "$GREP" | $GREP -v -e "$PROGNAME_SP -a $LANCELOT_APPLICATION" | $GREP -e "$LANCELOT_FILTER" | $AWK '{print $1}' | $XARGS $KILL
+	fi
 fi
 
 exit $?
