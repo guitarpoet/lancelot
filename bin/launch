@@ -178,30 +178,31 @@ case $LANCELOT_DAEMONTOOL in
 nohup)
 	for ((i=1; i<=$LANCELOT_NUMBER; i++))
 	do
-		pidf_SP=`$PRINT $LANCELOT_PID | sed s/\{\}/$i/`
+		ts=`GetTimeStamp2_sp`
+		pidf_SP=`$PRINT $LANCELOT_PID | sed s/\{\}/$ts/`
 		if [ $LANCELOT_OUTPUT ]; # If has output template
 		then
-			output_SP=`$PRINT $LANCELOT_OUTPUT | sed s/\{\}/$i/`
+			output_SP=`$PRINT $LANCELOT_OUTPUT | sed s/\{\}/$ts/`
 			if [ $LANCELOT_ERROR ]; # If has error output template
 			then
-				error_SP=`$PRINT $LANCELOT_ERROR | sed s/\{\}/$i/`
-				 nohup sh -c "cd $LANCELOT_WORKINGDIR;$@" 1>$output_SP 2>$error_SP &
+				error_SP=`$PRINT $LANCELOT_ERROR | sed s/\{\}/$ts/`
+				 nohup sh -c "cd $LANCELOT_WORKINGDIR;$LANCELOT_CMD" 1>$output_SP 2>$error_SP &
 			else
-				 nohup sh -c "cd $LANCELOT_WORKINGDIR;$@" 1>$output_SP &
+				 nohup sh -c "cd $LANCELOT_WORKINGDIR;$LANCELOT_CMD" 1>$output_SP &
 			fi
 		else
 			if [ $LANCELOT_ERROR ]; # If has error output template
 			then
-				error_SP=`$PRINT $LANCELOT_ERROR | sed s/\{\}/$i/`
-				nohup sh -c "cd $LANCELOT_WORKINGDIR;$@" 2>$error_SP &
+				error_SP=`$PRINT $LANCELOT_ERROR | sed s/\{\}/$ts/`
+				nohup sh -c "cd $LANCELOT_WORKINGDIR;$LANCELOT_CMD" 2>$error_SP &
 			else
-				nohup sh -c "cd $LANCELOT_WORKINGDIR;$@" &
+				nohup sh -c "cd $LANCELOT_WORKINGDIR;$LANCELOT_CMD" &
 			fi
 		fi
 		$PRINT $! > $pidf_SP
 		if [ $LANCELOT_INTERVAL ];
 		then
-			$PRINT "Launched process $i"
+			$PRINT "Launched process $i with timestamp $ts"
 			$SLEEP $LANCELOT_INTERVAL
 		fi
 	done
@@ -209,29 +210,30 @@ nohup)
 daemonize)
 	for ((i=1; i<=$LANCELOT_NUMBER; i++))
 	do
-		pidf_SP=`$PRINT $LANCELOT_PID | sed s/\{\}/$i/`
+		ts=`GetTimeStamp2_sp`
+		pidf_SP=`$PRINT $LANCELOT_PID | sed s/\{\}/$ts/`
 		if [ $LANCELOT_OUTPUT ]; # If has output template
 		then
-			output_SP=`$PRINT $LANCELOT_OUTPUT | sed s/\{\}/$i/`
+			output_SP=`$PRINT $LANCELOT_OUTPUT | sed s/\{\}/$ts/`
 			if [ $LANCELOT_ERROR ]; # If has error output template
 			then
-				error_SP=`$PRINT $LANCELOT_ERROR | sed s/\{\}/$i/`
-				daemonize -c $LANCELOT_WORKINGDIR -o $output_SP -e $error_SP -p $pidf_SP $@
+				error_SP=`$PRINT $LANCELOT_ERROR | sed s/\{\}/$ts/`
+				daemonize -c $LANCELOT_WORKINGDIR -o $output_SP -e $error_SP -p $pidf_SP $LANCELOT_CMD
 			else
-				daemonize -c $LANCELOT_WORKINGDIR -o $output_SP -p $pidf_SP $@
+				daemonize -c $LANCELOT_WORKINGDIR -o $output_SP -p $pidf_SP $LANCELOT_CMD
 			fi
 		else
 			if [ $LANCELOT_ERROR ]; # If has error output template
 			then
-				error_SP=`$PRINT $LANCELOT_ERROR | sed s/\{\}/$i/`
-				daemonize -c $LANCELOT_WORKINGDIR -e $error_SP -p $pidf_SP $@
+				error_SP=`$PRINT $LANCELOT_ERROR | sed s/\{\}/$ts/`
+				daemonize -c $LANCELOT_WORKINGDIR -e $error_SP -p $pidf_SP $LANCELOT_CMD
 			else
-				daemonize -c $LANCELOT_WORKINGDIR -p $pidf_SP $@
+				daemonize -c $LANCELOT_WORKINGDIR -p $pidf_SP $LANCELOT_CMD
 			fi
 		fi
 		if [ $LANCELOT_INTERVAL ];
 		then
-			$PRINT "Launched process $i"
+			$PRINT "Launched process $i with timestamp $ts"
 			$SLEEP $LANCELOT_INTERVAL
 		fi
 	done
